@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PuzzleScript : MonoBehaviour
+public class PlayerModel : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,11 +12,5 @@ public class PuzzleScript : MonoBehaviour
     void Update()
     {
         
-    }
-
-    void executePuzzle()
-    {
-        // Your puzzle logic goes here
-        Debug.Log("Puzzle executed!");
     }
 }
