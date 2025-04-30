@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bluecricle_0: -6055968549641486879
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
