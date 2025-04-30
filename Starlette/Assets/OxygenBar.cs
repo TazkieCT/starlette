@@ -13,7 +13,7 @@ public class OxygenBar : MonoBehaviour
         }
     }
 
-    void Update()
+    public void HandleUpdate()
     {
         if (oxygenImage != null)
         {
