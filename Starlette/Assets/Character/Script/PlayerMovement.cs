@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -9,7 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private Vector2 lastDirection;
     private bool isMoving; 
-
+    public float interactRange = 1f;
+    public InventoryManager inventoryManager;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -23,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         isMoving = false; 
     }
 
-    void Update()
+    public void HandleUpdate()
     {
         inputMovement = new Vector2(
             Input.GetAxisRaw("Horizontal"),
@@ -42,6 +44,32 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("lastX", lastDirection.x);
         animator.SetFloat("lastY", lastDirection.y);
+
+
+        if (Input.GetKeyDown(KeyCode.E)){
+            // Debug.Log("Press e");
+            Interact();
+        }
+    }
+
+     void Interact()
+    {
+        Vector2 interactPosition = (Vector2)transform.position + lastDirection * interactRange;
+        Debug.DrawLine(transform.position, interactPosition, Color.red, 1f);
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, lastDirection, interactRange, LayerMask.GetMask("Interactable"));
+        Debug.Log(hit.collider);
+        if (hit.collider != null)
+        {
+            hit.collider.GetComponent<Interactable>().Interact();
+        }
+        else
+        {
+            Debug.Log("Hello");
+            Item item = inventoryManager.getSelectedItem();
+            
+            item.Use();
+        }
     }
 
     private void FixedUpdate()
