@@ -4,9 +4,9 @@ public enum GameState { FreeRoam, Interacting }
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerMovement playerMovement;
+    [SerializeField] OxygenBar oxygenBar;
 
     GameState state;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         
@@ -22,11 +22,11 @@ public class GameController : MonoBehaviour
         };
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if(state == GameState.FreeRoam){
             playerMovement.HandleUpdate();
+            oxygenBar.HandleUpdate();
         }else if(state == GameState.Interacting){
             DialogManager.Instance.HandleUpdate();
         }
