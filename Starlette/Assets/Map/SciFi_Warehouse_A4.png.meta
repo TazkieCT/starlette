@@ -109,7 +109,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
+<<<<<<<< HEAD:Starlette/Assets/Map/SciFi_Warehouse_A4.png.meta
     nameFileIdTable: {}
+========
+
+    nameFileIdTable:
+      InventoryFrame_0: -7343291738981823173
+>>>>>>>> b0380debaa346b13a1fe30982a6c5504da2ebbb1:Starlette/Assets/Inventory/InventoryFrame.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
