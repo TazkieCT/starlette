@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public enum GameState { FreeRoam, Interacting }
+public enum GameState { FreeRoam, Interacting, OnTablet }
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] OxygenBar oxygenBar;
-
+    [SerializeField] TabletManager tabletManager;
     GameState state;
     private void Start()
     {
@@ -21,14 +21,29 @@ public class GameController : MonoBehaviour
             }
         };
     }
-
+    public void  SetState(string newState)
+    {
+        if (System.Enum.TryParse(newState, true, out GameState parsedState))
+        {
+            state = parsedState;
+            Debug.Log($"State changed to: {state}");
+        }
+        Debug.Log("State changed to: " + newState);
+    }
     private void Update()
     {
-        if(state == GameState.FreeRoam){
+        if (state == GameState.FreeRoam)
+        {
             playerMovement.HandleUpdate();
             oxygenBar.HandleUpdate();
-        }else if(state == GameState.Interacting){
+        }
+        else if (state == GameState.Interacting)
+        {
             DialogManager.Instance.HandleUpdate();
+        }
+        else if (state == GameState.OnTablet)
+        {
+            tabletManager.HandleUpdate();
         }
     }
 }
