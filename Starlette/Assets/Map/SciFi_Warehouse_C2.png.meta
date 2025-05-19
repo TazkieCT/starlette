@@ -72,7 +72,12 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
+<<<<<<<< HEAD:Starlette/Assets/Map/SciFi_Warehouse_C2.png.meta
     textureCompression: 1
+========
+
+    textureCompression: 0
+>>>>>>>> b0380debaa346b13a1fe30982a6c5504da2ebbb1:Starlette/Assets/Inventory/BackpackInventory.png.meta
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
