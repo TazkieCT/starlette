@@ -867,6 +867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7638f49c429d70469307a6a8aaed0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
 --- !u!19719996 &163563539
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -55219,6 +55220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 1832243242}
   oxygenBar: {fileID: 2091868523}
+  tabletManager: {fileID: 0}
 --- !u!114 &1118472617
 MonoBehaviour:
   m_ObjectHideFlags: 0
