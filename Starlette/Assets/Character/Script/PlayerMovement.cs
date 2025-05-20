@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 inputMovement;
     private Animator animator;
     private Vector2 lastDirection;
-    private bool isMoving; 
+    private bool isMoving;
     public float interactRange = 1f;
     public InventoryManager inventoryManager;
     void Awake()
@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         velocity = new Vector2(speed, speed);
         characterBody = GetComponent<Rigidbody2D>();
         lastDirection = Vector2.down;
-        isMoving = false; 
+        isMoving = false;
     }
 
     public void HandleUpdate()
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         );
 
         isMoving = inputMovement != Vector2.zero;
-        animator.SetBool("isMoving", isMoving); 
+        animator.SetBool("isMoving", isMoving);
 
         if (isMoving)
         {
@@ -46,13 +46,14 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("lastY", lastDirection.y);
 
 
-        if (Input.GetKeyDown(KeyCode.E)){
+        if (Input.GetKeyDown(KeyCode.E))
+        {
             // Debug.Log("Press e");
             Interact();
         }
     }
 
-     void Interact()
+    void Interact()
     {
         Vector2 interactPosition = (Vector2)transform.position + lastDirection * interactRange;
         Debug.DrawLine(transform.position, interactPosition, Color.red, 1f);
@@ -67,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("Hello");
             Item item = inventoryManager.getSelectedItem();
-            
+
             item.Use();
         }
     }
@@ -77,4 +78,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 delta = inputMovement * velocity * Time.deltaTime;
         characterBody.MovePosition(characterBody.position + delta);
     }
+
+    public void SetFacingDirection(Vector2 faceDirection)
+    {
+        animator.SetFloat("x", faceDirection.x);
+        animator.SetFloat("y", faceDirection.y);
+    }
 }
