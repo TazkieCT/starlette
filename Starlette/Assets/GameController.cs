@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum GameState { FreeRoam, Interacting, OnTablet }
+public enum GameState { FreeRoam, Interacting, OnTablet, OnPuzzle }
 public class GameController : MonoBehaviour
 {
     [SerializeField] PlayerMovement playerMovement;
@@ -44,6 +44,10 @@ public class GameController : MonoBehaviour
         else if (state == GameState.OnTablet)
         {
             tabletManager.HandleUpdate();
+        }
+        else if (state == GameState.OnPuzzle)
+        {
+            
         }
     }
 }
