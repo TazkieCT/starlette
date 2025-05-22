@@ -1,7 +1,7 @@
-using UnityEngine;
-using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 public class DialogueSystem : MonoBehaviour
 {
@@ -13,9 +13,12 @@ public class DialogueSystem : MonoBehaviour
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float continuePromptDelay = 0.2f;
 
-    [Header("Dialogue Content")]
-    [SerializeField] private List<string> dialogueLines = new List<string>();
+    [Header("Dialogue Setup")]
+    [SerializeField] private DialogTextDB dialogDB;
+    [SerializeField] private RoomID selectedRoom;
+    [SerializeField] private DialogueID selectedDialogue;
 
+    private List<string> dialogueLines;
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private bool skipTyping = false;
@@ -24,8 +27,14 @@ public class DialogueSystem : MonoBehaviour
     private void Start()
     {
         if (continuePrompt != null)
-        {
             continuePrompt.gameObject.SetActive(false);
+
+        dialogueLines = dialogDB.GetDialogueLines(selectedRoom, selectedDialogue);
+
+        if (dialogueLines == null || dialogueLines.Count == 0)
+        {
+            Debug.LogWarning($"Dialog kosong untuk Room: {selectedRoom} dan Dialog: {selectedDialogue}");
+            return;
         }
 
         StartDialogue();
@@ -36,15 +45,12 @@ public class DialogueSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isTyping)
-            {
                 skipTyping = true;
-            }
             else
             {
                 if (continuePrompt != null)
-                {
                     continuePrompt.gameObject.SetActive(false);
-                }
+
                 ShowNextLine();
             }
         }
@@ -93,19 +99,9 @@ public class DialogueSystem : MonoBehaviour
         }
         else
         {
-            // Dialogue ended
             dialogueText.text = "";
             if (continuePrompt != null)
-            {
                 continuePrompt.gameObject.SetActive(false);
-            }
         }
-    }
-
-    public void SetDialogueLines(List<string> newLines)
-    {
-        dialogueLines = newLines;
-        currentLineIndex = 0;
-        StartDialogue();
     }
 }
