@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class DialogueSystem : MonoBehaviour
 {
-    [Header("Text References")]
+    [Header("References")]
+    [SerializeField] private Canvas dialogueCanvas;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI continuePrompt;
 
@@ -15,33 +16,26 @@ public class DialogueSystem : MonoBehaviour
 
     [Header("Dialogue Setup")]
     [SerializeField] private DialogTextDB dialogDB;
-    [SerializeField] private RoomID selectedRoom;
-    [SerializeField] private DialogueID selectedDialogue;
 
+
+    [SerializeField] private PlayerMovement playerMovement;
     private List<string> dialogueLines;
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private bool skipTyping = false;
     private Coroutine typingCoroutine;
+    private bool dialogueFinished = false;
 
-    private void Start()
+    private void Awake()
     {
-        if (continuePrompt != null)
-            continuePrompt.gameObject.SetActive(false);
-
-        dialogueLines = dialogDB.GetDialogueLines(selectedRoom, selectedDialogue);
-
-        if (dialogueLines == null || dialogueLines.Count == 0)
-        {
-            Debug.LogWarning($"Dialog kosong untuk Room: {selectedRoom} dan Dialog: {selectedDialogue}");
-            return;
-        }
-
-        StartDialogue();
+        if (dialogueCanvas != null)
+            dialogueCanvas.enabled = false;
     }
 
     private void Update()
     {
+        if (!dialogueCanvas.enabled) return;
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (isTyping)
@@ -56,8 +50,23 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-    public void StartDialogue()
+    public void StartDialogue(RoomID room, DialogueID dialogue)
     {
+        if (playerMovement != null)
+            playerMovement.canMove = false;
+
+        dialogueLines = dialogDB.GetDialogueLines(room, dialogue);
+
+        if (dialogueLines == null || dialogueLines.Count == 0)
+        {
+            Debug.LogWarning($"Dialogue empty for Room: {room} and Dialogue: {dialogue}");
+            return;
+        }
+
+        if (dialogueCanvas != null)
+            dialogueCanvas.enabled = true;
+
+        dialogueFinished = false;
         currentLineIndex = 0;
         typingCoroutine = StartCoroutine(TypeDialogue(dialogueLines[currentLineIndex]));
     }
@@ -99,9 +108,20 @@ public class DialogueSystem : MonoBehaviour
         }
         else
         {
+            dialogueFinished = true;
             dialogueText.text = "";
             if (continuePrompt != null)
                 continuePrompt.gameObject.SetActive(false);
+
+            EndDialogue();
         }
     }
+
+    private void EndDialogue()
+    {
+        dialogueCanvas.enabled = false;
+        if (playerMovement != null)
+            playerMovement.canMove = true;
+    }
+
 }

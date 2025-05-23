@@ -12,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isMoving;
     public float interactRange = 1f;
     public InventoryManager inventoryManager;
+
+    public bool canMove = true;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -27,6 +30,13 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleUpdate()
     {
+        if (!canMove)
+        {
+            inputMovement = Vector2.zero;
+            animator.SetBool("isMoving", false);
+            return;
+        }
+
         inputMovement = new Vector2(
             Input.GetAxisRaw("Horizontal"),
             Input.GetAxisRaw("Vertical")
@@ -44,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("lastX", lastDirection.x);
         animator.SetFloat("lastY", lastDirection.y);
-
 
         if (Input.GetKeyDown(KeyCode.E))
         {
