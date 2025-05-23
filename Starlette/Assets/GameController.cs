@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
         if (state == GameState.FreeRoam)
         {
             playerMovement.HandleUpdate();
-            oxygenBar.HandleUpdate();
+            // oxygenBar.HandleUpdate();
         }
         else if (state == GameState.Interacting)
         {
