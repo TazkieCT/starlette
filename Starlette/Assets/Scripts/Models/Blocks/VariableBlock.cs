@@ -1,6 +1,6 @@
 
 
-public class VariableBlock: CodeBlock, IDataType
+public class VariableBlock: CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
@@ -20,7 +20,7 @@ public class VariableBlock: CodeBlock, IDataType
     }
     
 
-    public override object Evaluate(CompilerContext context) => context.GetVariable(VariableName);
+    public override object Evaluate(CompilerContext context = null) => Value.Evaluate();
 
     public override string ToString()
     {
@@ -47,8 +47,4 @@ public class VariableBlock: CodeBlock, IDataType
         }
     }
 
-    public DataType GetDataType()
-    {
-        return Value.GetDataType();
-    }
 }

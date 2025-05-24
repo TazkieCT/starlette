@@ -39,6 +39,13 @@ public class LogicalOperator : OperatorBlock
             _ => throw new System.Exception("Invalid logical operator")
         };
     }
+
+    /// <summary>
+    /// Initializes the logical operator with a specific value.
+    /// recieves LogicalOperatorType Value
+    /// </summary>
+    /// <param name="value"></param>
+    /// <exception cref="ArgumentException"></exception>
     public override void Init(object value)
     {
         if (value is LogicalOperatorType logicalOperatorType)

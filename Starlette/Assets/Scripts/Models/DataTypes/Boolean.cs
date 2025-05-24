@@ -10,7 +10,7 @@ public class Boolean : DataType
         return Random.Range(0, 2) == 0;
     }
 
-    public bool ParseValue(object value)
+    public static bool ParseValue(object value)
     {
         return (bool)value;
     }

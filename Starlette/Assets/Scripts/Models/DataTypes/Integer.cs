@@ -9,7 +9,7 @@ public class Integer : DataType
         return Random.Range(int.MinValue, int.MaxValue);
     }
 
-    public int ParseValue(object value)
+    public static int ParseValue(object value)
     {
         return (int)value;
     }

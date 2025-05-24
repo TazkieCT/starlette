@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -6,12 +7,12 @@ public class FloatType : DataType
 
     public override object GetRandomValue()
     {
-        return Random.Range(float.MinValue, float.MaxValue);
+        return UnityEngine.Random.Range(float.MinValue, float.MaxValue);
     }
-
-    public float ParseValue(object value)
+    
+    public static float ParseValue(object value)
     {
-        return (float)value;
+        return Convert.ToSingle(value);
     }
 
     public override bool IsValidValue(object value)

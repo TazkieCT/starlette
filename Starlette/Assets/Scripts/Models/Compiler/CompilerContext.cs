@@ -16,10 +16,6 @@ public class CompilerContext
 
         }
         // validasi tipe data yang di assign,
-        if (Variables[name].GetDataType() != value.GetDataType())
-        {
-            throw new Exception($"Variable {name}: data type mismatch.");
-        }
 
 
         Variables[name] = value;
