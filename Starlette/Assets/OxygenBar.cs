@@ -3,21 +3,21 @@ using UnityEngine.UI;
 
 public class OxygenBar : MonoBehaviour
 {
-    public Image oxygenImage; 
-
+    public Image oxygenImage;
+    public float speed;
     void Start()
     {
         if (oxygenImage != null)
         {
-            oxygenImage.fillAmount = 1f; 
+            oxygenImage.fillAmount = 0f; 
         }
     }
 
-    public void HandleUpdate()
+    public void Update()
     {
         if (oxygenImage != null)
         {
-            oxygenImage.fillAmount -= 0.01f * Time.deltaTime;
+            oxygenImage.fillAmount += speed * Time.deltaTime;
 
            
         }
