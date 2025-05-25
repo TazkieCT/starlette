@@ -5,9 +5,13 @@ public class Boolean : DataType
 {
 
 
-    public override object GetRandomValue()
+    public static Boolean GetRandomValue()
     {
-        return Random.Range(0, 2) == 0;
+        Boolean randomBool = new()
+        {
+            Value = Random.value > 0.5f
+        };
+        return randomBool;
     }
 
     public static bool ParseValue(object value)

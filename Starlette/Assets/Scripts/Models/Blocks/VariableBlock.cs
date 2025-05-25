@@ -4,10 +4,6 @@ public class VariableBlock: CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
-    public VariableBlock(LiteralBlock value)
-    {
-        Value = value;
-    }
 
     public LiteralBlock GetValue()
     {

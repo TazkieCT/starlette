@@ -4,12 +4,12 @@ using UnityEngine.UIElements.Experimental;
 public abstract class DataType : IStringable
 {
     public object Value { get; set; }
-    public abstract object GetRandomValue();
+
     public abstract bool IsValidValue(object value);
     public object GetValue() => Value;
     public abstract override string ToString();
 
-    public static DataType CreateDataType<T>(object value)
+    public static DataType CreateDataType<T>(object value = null)
     {
         return typeof(T) switch
         {

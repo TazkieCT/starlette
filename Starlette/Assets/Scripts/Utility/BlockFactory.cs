@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
+using TMPro;
 using UnityEngine;
 
 public enum BlockType
@@ -65,6 +66,11 @@ public class BlockFactory : MonoBehaviour
             if (block != null)
             {
                 block.Init(value);
+            }
+            TextMeshProUGUI text = instance.GetComponentInChildren<TextMeshProUGUI>();
+            if (text != null)
+            {
+                text.text = block.ToString();
             }
         }
         return instance;

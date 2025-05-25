@@ -18,39 +18,46 @@ public class FirstPart : MonoBehaviour
             Debug.LogError("BlockHolder component not found in children.");
             return;
         }
-
-        GameObject operatorBlock = factory.CreateBlock(BlockType.ArithmeticOperator, ArithmeticType.Add, holder.transform);
-        GameObject value1 = factory.CreateBlock(BlockType.Literal_Float, DataType.CreateDataType<float>(7.5f), holder.transform);
-        GameObject value2 = factory.CreateBlock(BlockType.Literal_Int, DataType.CreateDataType<int>(10), holder.transform);
-
-        holder.AddExistingBlock(value1);
-        holder.AddExistingBlock(operatorBlock);
-        holder.AddExistingBlock(value2);
-
-        operatorBlock.GetComponent<ArithmeticOperatorBlock>().setLeftChild(value1.GetComponent<CodeBlock>());
-        operatorBlock.GetComponent<ArithmeticOperatorBlock>().setRightChild(value2.GetComponent<CodeBlock>());
-        object result = operatorBlock.GetComponent<ArithmeticOperatorBlock>().Evaluate();
-
-        if (result is int intValue)
+        for (int i = 0; i < 3; i++)
         {
-            Debug.Log($"Result of addition: {intValue}");
-            holder.AddExistingBlock(factory.CreateBlock(BlockType.Literal_Int, DataType.CreateDataType<int>(intValue), holder.transform));
+            RandomizeBlocks(holder);
         }
-        else if (result is float floatValue)
+    }
+
+    private void RandomizeBlocks(BlockHolder holder)
+    {
+
+        BlockType randomType = GetRandomType();
+        if (randomType == BlockType.Literal_Float)
         {
-            Debug.Log($"Result of addition: {floatValue}");
-            holder.AddExistingBlock(factory.CreateBlock(BlockType.Literal_Float, DataType.CreateDataType<float>(floatValue), holder.transform));
+            FloatType randomValue = FloatType.GetRandomValue();
+            GameObject block = factory.CreateBlock(randomType, randomValue, holder.transform);
+            holder.AddBlock(block);
         }
-        else
+        else if (randomType == BlockType.Literal_Int)
         {
-            Debug.LogError("Result is not a number.");
+            Integer randomValue = Integer.GetRandomValue();
+            GameObject block = factory.CreateBlock(randomType, randomValue, holder.transform);
+            holder.AddBlock(block);
+        }
+        else if (randomType == BlockType.Literal_Bool)
+        {
+            Boolean randomValue = Boolean.GetRandomValue();
+            GameObject block = factory.CreateBlock(randomType, randomValue, holder.transform);
+            holder.AddBlock(block);
         }
 
     }
 
-    // Update is called once per frame
-    void Update()
+    private BlockType GetRandomType()
     {
-        
+        int randomIndex = Random.Range(0, 3);
+        return randomIndex switch
+        {
+            0 => BlockType.Literal_Float,
+            1 => BlockType.Literal_Int,
+            2 => BlockType.Literal_Bool,
+            _ => BlockType.Literal_Int // Default case
+        };
     }
 }
