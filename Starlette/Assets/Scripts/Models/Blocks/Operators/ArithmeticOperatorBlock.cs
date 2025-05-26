@@ -15,15 +15,15 @@ public class ArithmeticOperatorBlock : OperatorBlock
     {
         // Anggap left sama right itu udah pasti antara Literal Atau Variable
         // Kalau variable ntar Evaluatenya otomatis ke Evaluatenya literal block
-        DataType left = (DataType)leftOperandBlock.Evaluate();
-        DataType right = (DataType)rightOperandBlock.Evaluate();
+        object left = leftOperandBlock.Evaluate();
+        object right = rightOperandBlock.Evaluate();
 
         // Kondisinya itu kiri antar
-        if (left is FloatType || right is FloatType)
+        if (left is float || right is float)
         {
             // hasilnya pasti float.
-            float leftFloat = FloatType.ParseValue(left.GetValue());
-            float rightFloat = FloatType.ParseValue(right.GetValue());
+            float leftFloat = FloatType.ParseValue(left);
+            float rightFloat = FloatType.ParseValue(right);
             return BlockType switch
             {
                 ArithmeticType.Add => leftFloat + rightFloat,
@@ -37,8 +37,8 @@ public class ArithmeticOperatorBlock : OperatorBlock
         else
         {
             // hasilnya pasti integer.
-            int leftInt = Integer.ParseValue(left.GetValue());
-            int rightInt = Integer.ParseValue(right.GetValue());
+            int leftInt = Integer.ParseValue(left);
+            int rightInt = Integer.ParseValue(right);
             return BlockType switch
             {
                 ArithmeticType.Add => leftInt + rightInt,
@@ -64,19 +64,22 @@ public class ArithmeticOperatorBlock : OperatorBlock
         };
     }
 
-    public static int GetPrecedence(ArithmeticType arithmeticType)
+    public override int Precedence => BlockType switch
     {
-        return arithmeticType switch
-        {
-            ArithmeticType.Add => 1,
-            ArithmeticType.Substract => 1,
-            ArithmeticType.Multiply => 2,
-            ArithmeticType.Divide => 2,
-            ArithmeticType.Modulo => 2,
-            _ => 0,
-        };
-    }
+        ArithmeticType.Add => 2,
+        ArithmeticType.Substract => 2,
+        ArithmeticType.Multiply => 3,
+        ArithmeticType.Divide => 3,
+        ArithmeticType.Modulo => 3,
+        _ => 0,
+    };
 
+    /// <summary>
+    ///  Initializes the arithmetic operator with a specific value.
+    /// Receives ArithmeticType value.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <exception cref="ArgumentException"></exception>
     public override void Init(object value)
     {
         if (value is ArithmeticType arithmeticType)

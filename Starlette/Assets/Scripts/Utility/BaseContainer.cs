@@ -43,6 +43,11 @@ public abstract class BaseBlockContainer : MonoBehaviour
         return block != null && blocks.Contains(block);
     }
 
+    public void SetBlocks(List<GameObject> newBlocks)
+    {
+        blocks = newBlocks;
+        UpdateBlockPositions();
+    }
     public virtual TransferResult AddBlock(GameObject block, TransferType transferType = TransferType.Move)
     {
         if (block == null) return TransferResult.InvalidBlock;

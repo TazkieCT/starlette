@@ -2,49 +2,70 @@ using System.Collections.Generic;
 
 public static class ExpressionTreeBuilder
 {
-    public static CodeBlock BuildExpressionTree(List<CodeBlock> blocks)
+    public static CodeBlock BuildExpressionTree(List<CodeBlock> postfix)
     {
-        Stack<ArithmeticOperatorBlock> operatorStack = new();
-        Stack<CodeBlock> operandStack = new();
+        Stack<CodeBlock> stack = new Stack<CodeBlock>();
 
-        foreach (var token in blocks)
+        foreach (var block in postfix)
         {
-            if (token is LiteralBlock or VariableBlock)
+            if (block is LiteralBlock || block is VariableBlock)
             {
-                operandStack.Push(token);
+                stack.Push(block);
             }
-            else if (token is ArithmeticOperatorBlock op)
+            else if (block is OperatorBlock op)
+            {
+                op.setRightChild(stack.Pop());
+                op.setLeftChild(stack.Pop());
+                stack.Push(op);
+            }
+        }
+
+        return stack.Pop(); 
+    }
+
+    public static List<CodeBlock> ToPostfix(List<CodeBlock> infix)
+    {
+        Stack<CodeBlock> operatorStack = new Stack<CodeBlock>();
+        List<CodeBlock> output = new List<CodeBlock>();
+
+        foreach (CodeBlock codeBlock in infix)
+        {
+            if (codeBlock is LiteralBlock || codeBlock is VariableBlock)
+            {
+                output.Add(codeBlock);
+            }
+            else if (codeBlock is OperatorBlock op)
             {
                 while (operatorStack.Count > 0 &&
-                       ArithmeticOperatorBlock.GetPrecedence(op.BlockType) <= ArithmeticOperatorBlock.GetPrecedence(operatorStack.Peek().BlockType))
+                       operatorStack.Peek() is OperatorBlock topOp &&
+                       topOp.Precedence >= op.Precedence)
                 {
-                    ArithmeticOperatorBlock topOp = operatorStack.Pop();
-
-                    CodeBlock right = operandStack.Pop();
-                    CodeBlock left = operandStack.Pop();
-
-                    topOp.setLeftChild(left);
-                    topOp.setRightChild(right);
-                    operandStack.Push(topOp);
+                    output.Add(operatorStack.Pop());
                 }
-
                 operatorStack.Push(op);
+            }
+            else if (codeBlock is ParenthesisBlock p && p.Type == ParenthesisType.Open)
+            {
+                operatorStack.Push(p);
+            }
+            else if (codeBlock is ParenthesisBlock pc && pc.Type == ParenthesisType.Close)
+            {
+                while (operatorStack.Count > 0 && !(operatorStack.Peek() is ParenthesisBlock openParenthesis && openParenthesis.Type == ParenthesisType.Open))
+                {
+                    output.Add(operatorStack.Pop());
+                }
+                if (operatorStack.Count > 0)
+                {
+                    operatorStack.Pop();
+                }
             }
         }
 
-        // Final pass
         while (operatorStack.Count > 0)
         {
-            ArithmeticOperatorBlock op = operatorStack.Pop();
-
-            CodeBlock right = operandStack.Pop();
-            CodeBlock left = operandStack.Pop();
-
-            op.setLeftChild(left);
-            op.setRightChild(right);
-            operandStack.Push(op);
+            output.Add(operatorStack.Pop());
         }
 
-        return operandStack.Pop(); // final expression tree root
+        return output;
     }
 }

@@ -1,6 +1,8 @@
 
 
-public class VariableBlock: CodeBlock
+using UnityEngine.UIElements;
+
+public class VariableBlock : CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
@@ -15,6 +17,11 @@ public class VariableBlock: CodeBlock
         Value = value;
     }
     
+    public DataType GetDataType()
+    {
+        return Value.GetValue();
+    }
+
 
     public override object Evaluate(CompilerContext context = null) => Value.Evaluate();
 
@@ -42,5 +49,4 @@ public class VariableBlock: CodeBlock
             throw new System.Exception("Invalid value type for VariableBlock");
         }
     }
-
 }

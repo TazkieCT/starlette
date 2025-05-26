@@ -27,7 +27,7 @@ public class BlockSlot : MonoBehaviour
             block.gameObject.transform.SetParent(transform, false);
             block.gameObject.transform.localPosition = Vector3.zero;
             Debug.Log(block.name);
-            // background.SetActive(false);
+            background.SetActive(false);
         }
     }
 
@@ -37,6 +37,15 @@ public class BlockSlot : MonoBehaviour
         {
             block = null;
             background.SetActive(true);
+        }
+    }
+    
+    public void DestroyBlock()
+    {
+        if (block != null)
+        {
+            Destroy(block.gameObject);
+            Clear();
         }
     }
 }

@@ -5,15 +5,16 @@ public class OpenCloseBehavior : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private Button closeButton;
-    private GameController gameController;
+    [SerializeField] private GameController gameController;
     void Start()
     {
-        gameController = GameObject.FindFirstObjectByType<GameController>();
+        gameController = FindFirstObjectByType<GameController>();
         if (gameController == null)
         {
             Debug.LogError("GameController not found in the scene.");
             return;
         }
+        Debug.Log(gameController.name);
         
     }
 
@@ -31,6 +32,12 @@ public class OpenCloseBehavior : MonoBehaviour
 
     public void OpenPanel(string panelName = "")
     {
+        if (gameController == null)
+        {
+
+            Debug.LogError("GameController is not assigned." + gameController.gameObject.name);
+            return;
+        }
         gameController.SetState("OnPuzzle");
         Debug.Log($"Opening panel: {panelName}");
         // find the name of Gameobject of the direct child, then set it active
@@ -50,10 +57,5 @@ public class OpenCloseBehavior : MonoBehaviour
             return; // No panel name provided, do nothing
         }
         transform.Find(panelName).gameObject.SetActive(true);
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

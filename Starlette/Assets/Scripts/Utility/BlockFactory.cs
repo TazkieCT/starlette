@@ -13,6 +13,7 @@ public enum BlockType
     Variable_Int,
     Variable_Float,
     Variable_Bool,
+    Variable_Adapter,
     AssignmentOperator,
     LogicalOperator,
     ArithmeticOperator,

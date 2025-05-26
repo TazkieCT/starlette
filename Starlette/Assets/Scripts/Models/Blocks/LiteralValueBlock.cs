@@ -29,5 +29,5 @@ public class LiteralBlock : CodeBlock
         }
     }
 
-    public override object Evaluate(CompilerContext context = null) => Value;
+    public override object Evaluate(CompilerContext context = null) => Value.GetValue();
 }

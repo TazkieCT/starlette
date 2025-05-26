@@ -1,7 +1,8 @@
-using UnityEngine;
+
 
 public abstract class OperatorBlock : CodeBlock
 {
+    public abstract int Precedence { get; }
     protected CodeBlock rightOperandBlock;
     protected CodeBlock leftOperandBlock;
 

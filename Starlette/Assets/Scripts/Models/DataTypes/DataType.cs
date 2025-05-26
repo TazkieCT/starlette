@@ -13,9 +13,9 @@ public abstract class DataType : IStringable
     {
         return typeof(T) switch
         {
-            var type when type == typeof(bool) => new Boolean { Value = value },
-            var type when type == typeof(int) => new Integer { Value = value },
-            var type when type == typeof(float) => new FloatType { Value = value },
+            var type when type == typeof(bool) => new Boolean { Value = value == null ? false : value },
+            var type when type == typeof(int) => new Integer { Value = value == null ? 0 : value },
+            var type when type == typeof(float) => new FloatType { Value = value == null ? 0f : value },
             _ => throw new System.Exception($"Unknown data type: {typeof(T).Name}")
         };
     }

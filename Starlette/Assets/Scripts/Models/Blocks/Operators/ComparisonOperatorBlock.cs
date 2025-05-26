@@ -50,4 +50,6 @@ public class ComparisonOperatorBlock : OperatorBlock
             throw new ArgumentException("Invalid value type for ComparisonOperatorBlock");
         }
     }
+
+    public override int Precedence => 1;
 }

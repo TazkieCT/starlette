@@ -57,4 +57,5 @@ public class LogicalOperator : OperatorBlock
             throw new ArgumentException("Invalid value type for LogicalOperator");
         }
     }
+    public override int Precedence => 1;
 }

@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public abstract class CodeBlock : MonoBehaviour, IStringable
 {
+    
     void Awake()
     {
         Button button = gameObject.AddComponent<Button>();
         button.onClick.AddListener(BlockClicked);
     }
-    public string BlockId { get; set; }
     public override abstract string ToString();
     public abstract object Evaluate(CompilerContext context = null);
 

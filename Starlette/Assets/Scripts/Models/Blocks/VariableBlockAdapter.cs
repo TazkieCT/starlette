@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -8,21 +9,21 @@ public class VariableBlockAdapter : VariableBlock
 {
     [SerializeField] private TMP_InputField variableNameText;
     [SerializeField] private TMP_Dropdown dropdown;
+
+    public void Awake()
+    {
+        Value.Init(DataType.CreateDataType<int>()); // Default to Integer type
+        if(variableNameText == null) variableNameText = GetComponentInChildren<TMP_InputField>();
+        if(dropdown == null) dropdown = GetComponentInChildren<TMP_Dropdown>();
+        if(variableNameText == null || dropdown == null)
+        {
+            Debug.LogError("VariableBlockAdapter: Missing TMP_InputField or TMP_Dropdown component.");
+            return;
+        }
+    }
     public void TextFieldChanged()
     {
-        string newText = variableNameText.text;
-        // Validate the new text as a variable name
-        if (IsValidVariableName(newText))
-        {
-            Debug.Log($"Valid variable name: {newText}");
-            VariableName = newText;
-        }
-        else
-        {
-            // open error panel
-            // For demonstration purposes, we will log a warning.
-            Debug.LogWarning($"Invalid variable name: {newText}. Please use a valid C# identifier.");
-        }
+        VariableName = variableNameText.text;
     }
 
     public void DropdownOptionChanged()
@@ -66,20 +67,25 @@ public class VariableBlockAdapter : VariableBlock
         "_Imaginary", "_Noreturn", "_Static_assert", "_Thread_local"
     };  
 
-    public static bool IsValidVariableName(string name)
+    public static PayloadResultModel IsValidVariableName(string name)
     {
         if (string.IsNullOrEmpty(name))
-            return false;
+            return new PayloadResultModel("Variable name cannot be empty.", false);
 
         // Check if it's a reserved keyword
         foreach (var keyword in ReservedKeywords)
         {
             if (name == keyword)
-                return false;
+                return new PayloadResultModel($"Variable name cannot be a reserved keyword: {keyword}", false);
         }
 
         // Regular expression to match valid C# variable names
         // ^[a-zA-Z_][a-zA-Z0-9_]*$
-        return Regex.IsMatch(name, @"^[a-zA-Z_][a-zA-Z0-9_]*$");
+        if (!Regex.IsMatch(name, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
+        {
+            return new PayloadResultModel($"Variable name '{name}' is not valid. Please re-check the Naming Convention Manual.", false);
+        }
+
+        return new PayloadResultModel("Variable name is valid.", true);
     }
 }
