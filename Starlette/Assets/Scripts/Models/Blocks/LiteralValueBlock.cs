@@ -1,7 +1,5 @@
-using UnityEngine;
 
-
-public class LiteralBlock : CodeBlock, IDataType
+public class LiteralBlock : CodeBlock
 {
     private DataType Value;
     public void SetValue(DataType value)
@@ -10,10 +8,6 @@ public class LiteralBlock : CodeBlock, IDataType
     }
 
     public DataType GetValue()
-    {
-        return Value;
-    }
-    public DataType GetDataType()
     {
         return Value;
     }
@@ -35,5 +29,5 @@ public class LiteralBlock : CodeBlock, IDataType
         }
     }
 
-    public override object Evaluate(CompilerContext context) => Value.GetValue();
+    public override object Evaluate(CompilerContext context = null) => Value.GetValue();
 }

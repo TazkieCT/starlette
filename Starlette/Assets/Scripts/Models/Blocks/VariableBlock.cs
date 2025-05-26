@@ -1,13 +1,11 @@
 
 
-public class VariableBlock: CodeBlock, IDataType
+using UnityEngine.UIElements;
+
+public class VariableBlock : CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
-    public VariableBlock(LiteralBlock value)
-    {
-        Value = value;
-    }
 
     public LiteralBlock GetValue()
     {
@@ -19,8 +17,13 @@ public class VariableBlock: CodeBlock, IDataType
         Value = value;
     }
     
+    public DataType GetDataType()
+    {
+        return Value.GetValue();
+    }
 
-    public override object Evaluate(CompilerContext context) => context.GetVariable(VariableName);
+
+    public override object Evaluate(CompilerContext context = null) => Value.Evaluate();
 
     public override string ToString()
     {
@@ -45,10 +48,5 @@ public class VariableBlock: CodeBlock, IDataType
         {
             throw new System.Exception("Invalid value type for VariableBlock");
         }
-    }
-
-    public DataType GetDataType()
-    {
-        return Value.GetDataType();
     }
 }

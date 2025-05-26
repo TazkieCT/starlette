@@ -1,15 +1,14 @@
-using Unity.VisualScripting.Antlr3.Runtime;
+
 using UnityEngine;
 
 public class Integer : DataType
 {
-    
-    public override object GetRandomValue()
+    public static Integer GetRandomValue()
     {
-        return Random.Range(int.MinValue, int.MaxValue);
+        return new Integer { Value = Random.Range(-20, 20) };
     }
 
-    public int ParseValue(object value)
+    public static int ParseValue(object value)
     {
         return (int)value;
     }

@@ -1,17 +1,22 @@
+using System;
 using UnityEngine;
 
 
 public class FloatType : DataType
 {
 
-    public override object GetRandomValue()
+    public static FloatType GetRandomValue()
     {
-        return Random.Range(float.MinValue, float.MaxValue);
+        FloatType randomFloat = new()
+        {
+            Value = UnityEngine.Random.Range(-20f, 20f) // Random float between -20 and 20
+        };
+        return randomFloat;
     }
-
-    public float ParseValue(object value)
+    
+    public static float ParseValue(object value)
     {
-        return (float)value;
+        return Convert.ToSingle(value);
     }
 
     public override bool IsValidValue(object value)

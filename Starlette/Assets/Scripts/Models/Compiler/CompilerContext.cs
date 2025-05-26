@@ -1,28 +1,45 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class CompilerContext
+/// <summary>
+/// Derives from MonoBehaviour to keep the context in a specific Room
+/// </summary>
+public class CompilerContext : MonoBehaviour
 {
     private Dictionary<string, VariableBlock> Variables = new();
 
-    public void AssignVariable(string name, VariableBlock value)
+
+    public void DeclareAndAssignVariable(string name, VariableBlock value = null)
+    {
+        if (value == null)
+        {
+            DeclareVariable(name);
+        }
+        else
+        {
+            AssignVariable(name, value);
+        }
+    }
+    public PayloadResultModel DeclareVariable(string name)
+    {
+        if (Variables.ContainsKey(name))
+        {
+            return new PayloadResultModel("Variable already declared.", false);
+        }
+        // add new entries to variables
+        Variables.Add(name, null);
+        return new PayloadResultModel("Variable declared successfully.", true);
+    }
+    public PayloadResultModel AssignVariable(string name, VariableBlock value)
     {
 
-        // validasi kalau ada variable dengan nama yang sama
         if (!Variables.ContainsKey(name))
         {
-            // add new entries to variables
-            Variables.Add(name, value);
-
+            return new PayloadResultModel("Variable not declared.", false);
         }
-        // validasi tipe data yang di assign,
-        if (Variables[name].GetDataType() != value.GetDataType())
-        {
-            throw new Exception($"Variable {name}: data type mismatch.");
-        }
-
-
         Variables[name] = value;
+        return new PayloadResultModel("Variable assigned successfully.", true);
     }
 
 
@@ -30,7 +47,7 @@ public class CompilerContext
     {
         if (!Variables.ContainsKey(name))
         {
-            throw new Exception($"Variable {name} not declared.");
+            throw new KeyNotFoundException($"Variable '{name}' not found in the context.");
         }
         return Variables[name];
     }
