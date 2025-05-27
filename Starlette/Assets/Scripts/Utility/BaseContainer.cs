@@ -32,7 +32,6 @@ public abstract class BaseBlockContainer : MonoBehaviour
     // Virtual methods that can be overridden
     public virtual bool CanAcceptBlock(GameObject block)
     {
-        if (!receiver) return false;
         if (block == null) return false;
         if (IsFull) return false;
         return ValidateBlockPlacement(block);
@@ -59,13 +58,14 @@ public abstract class BaseBlockContainer : MonoBehaviour
         if (transferType == TransferType.Copy)
         {
             blockToAdd = Instantiate(block);
+            blockToAdd.GetComponent<CodeBlock>().Init(block.GetComponent<CodeBlock>());
         }
         // Add to container
-        blocks.Add(blockToAdd);
         blockToAdd.transform.SetParent(transform);
         blockToAdd.transform.localPosition = Vector3.zero; // Reset position
         blockToAdd.transform.localScale = Vector3.one; // Reset scale
-        blockToAdd.GetComponent<CodeBlock>().Init(block.GetComponent<CodeBlock>());
+        blocks.Add(blockToAdd);
+
         
         UpdateBlockPositions();
         return TransferResult.Success;
@@ -106,7 +106,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
         if (partnerContainer == this) return TransferResult.SameContainer;
         // Check if partner can accept the block
         Debug.Log(partnerContainer);
-        if (partnerContainer.CanAcceptBlock(block) && partnerContainer is FreeBlockContainer)
+        if (partnerContainer.CanAcceptBlock(block) && partnerContainer.receiver && partnerContainer is FreeBlockContainer)
         {
             // find an empty slot in the partner's block list, then Set the block with the parameter
             // then remove the block from this container list
@@ -115,33 +115,41 @@ public abstract class BaseBlockContainer : MonoBehaviour
             {
                 if (slot.GetBlock() == null)
                 {
-                    slot.SetBlock(block.GetComponent<CodeBlock>());
+                    CodeBlock newBlock = block.GetComponent<CodeBlock>();
+
+                    
                     if (defaultTransferType == TransferType.Move)
                     {
                         RemoveBlock(block);
                     }
+                    else
+                    {
+                        newBlock = Instantiate(newBlock);
+                        newBlock.Init(block.GetComponent<CodeBlock>());
+                    }
+                    slot.SetBlock(newBlock);
                     return TransferResult.Success;
                 }
             }
 
         }
-        else if (!partnerContainer.receiver)
-        {
-            RemoveBlock(block);
-            Destroy(block);
-            Debug.Log("Removed Block");
-        }
         else if (partnerContainer is BlockHolder)
         {
             BlockSlot slot = block.GetComponentInParent<BlockSlot>();
-            if (slot != null)
+            if (slot != null && partnerContainer.receiver)
             {
                 slot.Clear();
                 partnerContainer.AddBlock(block);
                 Debug.Log("Moved Block Back");
                 return TransferResult.Success;
             }
-            if(defaultTransferType == TransferType.Move)
+            else if (slot != null && !partnerContainer.receiver)
+            {
+                RemoveBlock(block);
+                slot.DestroyBlock();
+                return TransferResult.Success;
+            }
+            if (defaultTransferType == TransferType.Move)
             {
                 RemoveBlock(block);
                 Destroy(block);
@@ -151,9 +159,14 @@ public abstract class BaseBlockContainer : MonoBehaviour
             else
             {
                 partnerContainer.AddBlock(block, defaultTransferType);
-                Debug.Log("Added Block to Partner");
                 return TransferResult.Success;
             }
+        }
+        else if (!partnerContainer.receiver)
+        {
+            RemoveBlock(block);
+            Destroy(block);
+            Debug.Log("Removed Block");
         }
         else
         {

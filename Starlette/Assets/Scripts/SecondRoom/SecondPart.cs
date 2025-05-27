@@ -35,7 +35,8 @@ public class SecondPart : MonoBehaviour
 
     private void SetUpRightPart()
     {
-        
+        BlockHolder holder = secondPart.GetComponentInChildren<BlockHolder>();
+        SetUpVariableBlocks(holder);
     }
 
     private void SetUpLeftPart()
@@ -195,7 +196,20 @@ public class SecondPart : MonoBehaviour
         assignmentObject.setRightChild(root);
 
         object result = assignmentObject.Evaluate(context);
+        // Debug.Log($"Assignment result: {(result is VariableBlock ? "Yes" : "maklo")}");
+        if (result is VariableBlock blockResult)
+        {
+            BlockHolder secondHolder = secondPart.GetComponentInChildren<BlockHolder>();
+            if (secondHolder == null)
+            {
+                Debug.LogError("BlockHolder not found in the second part.");
+                return;
+            }
 
+            BlockType blockType = BlockFactory.GetBlockTypeFromVariables(blockResult);
+            GameObject newBlock = blockFactory.CreateBlock(blockType, blockResult, transform);
+            secondHolder.AddBlock(newBlock);
+        }
         ResetContainerState(holder);
     }
 
@@ -231,10 +245,20 @@ public class SecondPart : MonoBehaviour
     }
 
 
+    private void SetUpVariableBlocks(BlockHolder holder)
+    {
+        List<VariableBlock> variableBlocks = context.GetAllVariables();
+        if (variableBlocks.Count == 0)
+        {
+            Debug.LogWarning("No variable blocks found in the context.");
+            return;
+        }
 
-
-
-
+        foreach (VariableBlock block in variableBlocks)
+        {
+            holder.AddBlock(block.gameObject);
+        }
+    }
     public void ShowSecondPart()
     {
         firstPart.SetActive(false);

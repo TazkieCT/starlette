@@ -27,7 +27,7 @@ public class VariableBlock : CodeBlock
 
     public override string ToString()
     {
-        return Value.ToString();
+        return VariableName == "" ? Value.ToString() : VariableName;
     }
     public override void Init(object value)
     {

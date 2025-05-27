@@ -28,6 +28,7 @@ public abstract class CodeBlock : MonoBehaviour, IStringable
     {
         // take holder parent
         // transfer this block only 
+        
         BaseBlockContainer container = gameObject.GetComponentInParent<BaseBlockContainer>();
         Debug.Log(container.gameObject.name);
         container.TransferBlockToPartner(gameObject);
