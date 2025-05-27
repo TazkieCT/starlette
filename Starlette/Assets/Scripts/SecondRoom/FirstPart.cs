@@ -152,9 +152,6 @@ public class FirstPart : MonoBehaviour
 
         object result = assignmentObject.Evaluate(context);
         ResetContainerState(holder);
-
-
-
     }
 
 
