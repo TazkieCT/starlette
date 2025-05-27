@@ -9,7 +9,7 @@ public class FloatType : DataType
     {
         FloatType randomFloat = new()
         {
-            Value = UnityEngine.Random.Range(-20f, 20f) // Random float between -20 and 20
+            Value = UnityEngine.Random.Range(0f, 20f) // Random float between -20 and 20
         };
         return randomFloat;
     }

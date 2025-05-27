@@ -1,13 +1,23 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class CodeBlock : MonoBehaviour, IStringable
 {
-    
+
     void Awake()
     {
-        Button button = gameObject.AddComponent<Button>();
-        button.onClick.AddListener(BlockClicked);
+        if (GetComponent<Button>() == null)
+        {
+            Button button = gameObject.AddComponent<Button>();
+            button.onClick.AddListener(BlockClicked);
+        }
+        else
+        {
+            GetComponent<Button>().onClick.RemoveAllListeners();
+            GetComponent<Button>().onClick.AddListener(BlockClicked);
+        }
+        
     }
     public override abstract string ToString();
     public abstract object Evaluate(CompilerContext context = null);

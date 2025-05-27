@@ -19,10 +19,12 @@ public class FreeBlockContainer : BaseBlockContainer
         {
             if (child.gameObject.activeInHierarchy)
             {
-                AddBlock(child.gameObject, TransferType.Move);
+                blocks.Add(child.gameObject);
             }
         }
     }
+
+
     protected override void UpdateBlockPositions()
     {
         // CleanupNullBlocks();
@@ -102,7 +104,7 @@ public class FreeBlockContainer : BaseBlockContainer
         return block != null;
     }
 
-    private float GetBlockWidth(GameObject block)
+    public static float GetBlockWidth(GameObject block)
     {
         if (block == null) return 1f;
 
@@ -136,6 +138,11 @@ public class FreeBlockContainer : BaseBlockContainer
         }
 
         return width;
+    }
+
+    public float GetSpacing()
+    {
+        return blockSpacing;
     }
 
     public float GetTotalWidth()

@@ -36,6 +36,7 @@ public class ComparisonOperatorBlock : OperatorBlock
             ComparisonType.Greater => ">",
             ComparisonType.LessEqual => "<=",
             ComparisonType.GreaterEqual => ">=",
+            ComparisonType.NotEqual => "!=",
             _ => "?"
         };
     }

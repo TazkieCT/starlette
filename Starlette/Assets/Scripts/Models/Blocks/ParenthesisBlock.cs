@@ -27,6 +27,11 @@ public class ParenthesisBlock : CodeBlock
                 Type = ParenthesisType.Close;
             }
         }
+        else if (value is ParenthesisType parenthesisType)
+        {
+            Type = parenthesisType;
+        }
+
         else
         {
             throw new System.ArgumentException("Invalid value for ParenthesisBlock initialization");

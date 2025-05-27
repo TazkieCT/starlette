@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 // Base abstract class for block containers
 public abstract class BaseBlockContainer : MonoBehaviour
@@ -16,6 +14,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
     [Header("Partner Container")]
     [SerializeField] protected BaseBlockContainer partnerContainer;
     [SerializeField] protected TransferType defaultTransferType = TransferType.Move;
+    [SerializeField] protected bool receiver = true;
 
     protected List<GameObject> blocks = new List<GameObject>();
 
@@ -33,6 +32,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
     // Virtual methods that can be overridden
     public virtual bool CanAcceptBlock(GameObject block)
     {
+        if (!receiver) return false;
         if (block == null) return false;
         if (IsFull) return false;
         return ValidateBlockPlacement(block);
@@ -52,6 +52,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
     {
         if (block == null) return TransferResult.InvalidBlock;
         if (!CanAcceptBlock(block)) return TransferResult.DestinationFull;
+       
 
         // Handle the block based on transfer type
         GameObject blockToAdd = block;
@@ -62,7 +63,9 @@ public abstract class BaseBlockContainer : MonoBehaviour
         // Add to container
         blocks.Add(blockToAdd);
         blockToAdd.transform.SetParent(transform);
-
+        blockToAdd.transform.localPosition = Vector3.zero; // Reset position
+        blockToAdd.transform.localScale = Vector3.one; // Reset scale
+        
         UpdateBlockPositions();
         return TransferResult.Success;
     }
@@ -100,7 +103,6 @@ public abstract class BaseBlockContainer : MonoBehaviour
     {
         if (partnerContainer == null) return TransferResult.Failed;
         if (partnerContainer == this) return TransferResult.SameContainer;
-
         // Check if partner can accept the block
         Debug.Log(partnerContainer);
         if (partnerContainer.CanAcceptBlock(block) && partnerContainer is FreeBlockContainer)
@@ -122,15 +124,41 @@ public abstract class BaseBlockContainer : MonoBehaviour
             }
 
         }
+        else if (!partnerContainer.receiver)
+        {
+            RemoveBlock(block);
+            Destroy(block);
+            Debug.Log("Removed Block");
+        }
         else if (partnerContainer is BlockHolder)
         {
             BlockSlot slot = block.GetComponentInParent<BlockSlot>();
-            slot.Clear();
-            partnerContainer.AddBlock(block);
-            Debug.Log("Moved Block Back");
-            return TransferResult.Success;
+            if (slot != null)
+            {
+                slot.Clear();
+                partnerContainer.AddBlock(block);
+                Debug.Log("Moved Block Back");
+                return TransferResult.Success;
+            }
+            if(defaultTransferType == TransferType.Move)
+            {
+                RemoveBlock(block);
+                Destroy(block);
+                Debug.Log("Removed Block");
+                return TransferResult.Success;
+            }
+            else
+            {
+                partnerContainer.AddBlock(block, defaultTransferType);
+                Debug.Log("Added Block to Partner");
+                return TransferResult.Success;
+            }
         }
-        Debug.LogError("Fail");
+        else
+        {
+            Debug.LogError("Fail");
+
+        }
 
         return TransferResult.DestinationFull;
     }
