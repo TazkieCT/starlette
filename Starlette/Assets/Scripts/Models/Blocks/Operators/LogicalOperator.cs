@@ -52,6 +52,10 @@ public class LogicalOperator : OperatorBlock
         {
             Operator = logicalOperatorType;
         }
+        else if(value is LogicalOperator logicalOperator)
+        {
+            Operator = logicalOperator.Operator;
+        }
         else
         {
             throw new ArgumentException("Invalid value type for LogicalOperator");

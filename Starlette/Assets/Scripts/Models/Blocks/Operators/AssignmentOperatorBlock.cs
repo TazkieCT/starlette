@@ -91,6 +91,10 @@ public class AssignmentOperatorBlock : OperatorBlock
         {
             BlockType = assignmentType;
         }
+        else if (value is AssignmentOperatorBlock assignmentOperatorBlock)
+        {
+            BlockType = assignmentOperatorBlock.BlockType;
+        }
         else
         {
             throw new ArgumentException("Invalid value type for AssignmentOperatorBlock");

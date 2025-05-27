@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -30,6 +31,11 @@ public class SecondPart : MonoBehaviour
 
         SetUpLeftPart();
         SetUpRightPart();
+    }
+
+    private void SetUpRightPart()
+    {
+        
     }
 
     private void SetUpLeftPart()
@@ -127,12 +133,106 @@ public class SecondPart : MonoBehaviour
         }
     }
 
-
-
-    private void SetUpRightPart()
+    public void ExecuteSequence(BaseBlockContainer holder)
     {
+        // Implementation for executing the code block
+        if (holder == null)
+        {
+            // bukain panel nanti
+            Debug.LogError("Holder is null, cannot execute sequence.");
+            return;
+        }
+        List<GameObject> blocks = holder.GetAllBlocks();
+        // Debug.Log($"Executing sequence with {blocks.Count} blocks.");
+        VariableBlock variableBlock = firstPart.GetComponentInChildren<VariableBlock>();
+        if (variableBlock == null)
+        {
+            Debug.LogError("First block is not a VariableBlock.");
+            return;
+        }
 
+        
+        PayloadResultModel variableCheck = VariableBlockAdapter.IsValidVariableName(variableBlock.VariableName);
+        if (variableCheck.Success == false)
+        {
+            // open panel
+            Debug.LogError($"{variableCheck.Message}");
+            return;
+        }
+
+        AssignmentOperatorBlock assignmentObject = firstPart.GetComponentInChildren<AssignmentOperatorBlock>();
+        if (assignmentObject == null)
+        {
+            Debug.LogError("Assignment block is not of type AssignmentOperatorBlock.");
+            return;
+        }
+
+        List<CodeBlock> codeBlocks = new List<CodeBlock>();
+        foreach (GameObject block in blocks)
+        {
+            CodeBlock codeBlock = block.GetComponent<CodeBlock>();
+            if (codeBlock == null)
+            {
+                Debug.LogError($"Block {block.name} is not a valid CodeBlock.");
+                return;
+            }
+            Debug.Log($"Adding block {codeBlock.ToString()} to code blocks.");
+            codeBlocks.Add(codeBlock);
+
+        }
+
+        List<CodeBlock> postFix = ExpressionTreeBuilder.ToPostfix(codeBlocks);
+        CodeBlock root = ExpressionTreeBuilder.BuildExpressionTree(postFix);
+        // Debug.Log($"Root of expression tree: {root.Evaluate(context)}");
+        if (root == null)
+        {
+            Debug.LogError("Failed to build expression tree from blocks.");
+            return;
+        }
+
+
+        assignmentObject.setLeftChild(variableBlock);
+        assignmentObject.setRightChild(root);
+
+        object result = assignmentObject.Evaluate(context);
+
+        ResetContainerState(holder);
     }
+
+    private void ResetContainerState(BaseBlockContainer container)
+    {
+        // reset state field kalau semuanya berhasil. ( reset free from containernya doang.)
+        // Instantiate VariableAdapter baru
+        GameObject adapter = firstPart.GetComponentInChildren<VariableBlockAdapter>().gameObject;
+        if (adapter == null)
+        {
+            Debug.LogError("VariableBlockAdapter not found in the first part.");
+            return;
+        }
+
+        GameObject newAdapter = blockFactory.CreateBlock(BlockType.Variable_Adapter, DataType.CreateDataType<int>(null), firstPart.transform);
+        // assign the same position and parent as the old adapter
+        newAdapter.transform.position = adapter.transform.position;
+        newAdapter.transform.SetParent(adapter.transform.parent);
+        // destroy the old adapter
+        Debug.Log($"Destroying adapter {adapter.name} and replacing it with a new VariableAdapter.");
+        Destroy(adapter);
+        List<GameObject> blocks = container.GetAllBlocks();
+
+        // Go through each block
+        for (int i = 0; i < blocks.Count; i++)
+        {
+            GameObject block = blocks[i];
+
+            container.RemoveBlock(block);
+            Destroy(block);
+        }
+        container.SetBlocks(blocks);
+    }
+
+
+
+
 
 
     public void ShowSecondPart()

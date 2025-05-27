@@ -31,6 +31,7 @@ public class VariableBlock : CodeBlock
     }
     public override void Init(object value)
     {
+
         if (value is DataType dataType)
         {
             Value.Init(dataType);
@@ -43,6 +44,11 @@ public class VariableBlock : CodeBlock
         {
             Value = literalBlock;
             VariableName = literalBlock.ToString();
+        }
+        else if(value is VariableBlock variableBlock)
+        {
+            VariableName = variableBlock.VariableName;
+            Value = variableBlock.Value;
         }
         else
         {

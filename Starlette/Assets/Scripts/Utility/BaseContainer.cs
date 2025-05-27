@@ -65,6 +65,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
         blockToAdd.transform.SetParent(transform);
         blockToAdd.transform.localPosition = Vector3.zero; // Reset position
         blockToAdd.transform.localScale = Vector3.one; // Reset scale
+        blockToAdd.GetComponent<CodeBlock>().Init(block.GetComponent<CodeBlock>());
         
         UpdateBlockPositions();
         return TransferResult.Success;

@@ -86,6 +86,10 @@ public class ArithmeticOperatorBlock : OperatorBlock
         {
             BlockType = arithmeticType;
         }
+        else if (value is ArithmeticOperatorBlock arithmeticOperatorBlock)
+        {
+            BlockType = arithmeticOperatorBlock.BlockType;
+        }
         else
         {
             throw new ArgumentException("Invalid value type for ArithmeticOperatorBlock");

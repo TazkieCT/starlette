@@ -23,6 +23,10 @@ public class LiteralBlock : CodeBlock
         {
             Value = dataType;
         }
+        else if(value is LiteralBlock literalBlock)
+        {
+            Value = literalBlock.Value;
+        }
         else
         {
             throw new System.Exception("Invalid value type for LiteralBlock");

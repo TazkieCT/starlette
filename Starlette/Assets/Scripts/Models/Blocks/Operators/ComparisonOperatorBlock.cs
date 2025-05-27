@@ -46,6 +46,36 @@ public class ComparisonOperatorBlock : OperatorBlock
         {
             ComparisonType = comparisonType;
         }
+        else if (value is ComparisonOperatorBlock comparisonOperatorBlock)
+        {
+            ComparisonType = comparisonOperatorBlock.ComparisonType;
+        }
+        else if (value is string strValue)
+        {
+            switch (strValue)
+            {
+                case "==":
+                    ComparisonType = ComparisonType.Equal;
+                    break;
+                case "<":
+                    ComparisonType = ComparisonType.Less;
+                    break;
+                case ">":
+                    ComparisonType = ComparisonType.Greater;
+                    break;
+                case "<=":
+                    ComparisonType = ComparisonType.LessEqual;
+                    break;
+                case ">=":
+                    ComparisonType = ComparisonType.GreaterEqual;
+                    break;
+                case "!=":
+                    ComparisonType = ComparisonType.NotEqual;
+                    break;
+                default:
+                    throw new ArgumentException("Invalid string value for ComparisonOperator");
+            }
+        }
         else
         {
             throw new ArgumentException("Invalid value type for ComparisonOperatorBlock");

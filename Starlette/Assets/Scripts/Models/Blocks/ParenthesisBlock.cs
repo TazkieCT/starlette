@@ -31,7 +31,10 @@ public class ParenthesisBlock : CodeBlock
         {
             Type = parenthesisType;
         }
-
+        else if (value is ParenthesisBlock parenthesisBlock)
+        {
+            Type = parenthesisBlock.Type;
+        }
         else
         {
             throw new System.ArgumentException("Invalid value for ParenthesisBlock initialization");
