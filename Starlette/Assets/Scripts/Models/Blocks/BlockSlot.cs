@@ -26,18 +26,14 @@ public class BlockSlot : MonoBehaviour
         {
             block.gameObject.transform.SetParent(transform, false);
             block.gameObject.transform.localPosition = Vector3.zero;
-            Debug.Log(block.name);
             background.SetActive(false);
         }
     }
 
     public void Clear()
     {
-        if (block != null)
-        {
-            block = null;
-            background.SetActive(true);
-        }
+        block = null;
+        background.SetActive(true);
     }
     
     public void DestroyBlock()

@@ -1,16 +1,26 @@
 using System;
 using Mono.Cecil.Cil;
 using NUnit.Framework.Constraints;
+using TMPro;
 using UnityEngine;
 
 
-public enum ArithmeticType { Add, Substract, Multiply, Divide, Modulo }
+public enum ArithmeticType { Add, Substract, Multiply, Divide, Modulo, Random }
+
 
 public class ArithmeticOperatorBlock : OperatorBlock
 {
 
-    public ArithmeticType BlockType { get; set; }
-
+    public ArithmeticType BlockType;
+    protected override void AdditionalAwake()
+    {
+        if (BlockType == ArithmeticType.Random)
+        {
+            BlockType = (ArithmeticType)UnityEngine.Random.Range(0, 5);
+            // Debug.Log($"Random Arithmetic Operator: {BlockType}, {ToString()}");
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
+        }   
+    }
     public override object Evaluate(CompilerContext context = null)
     {
         // Anggap left sama right itu udah pasti antara Literal Atau Variable
@@ -19,9 +29,11 @@ public class ArithmeticOperatorBlock : OperatorBlock
         object right = rightOperandBlock.Evaluate();
 
         // Kondisinya itu kiri antar
-        if (left is float || right is float)
+            Debug.Log($"Evaluating Arithmetic: {left} {BlockType} {right}");
+        if (left is float t || right is float r||
+        (FloatType.ParseValue(left) % FloatType.ParseValue(right) != 0.0f && BlockType == ArithmeticType.Divide) || 
+        ((int)left % (int)right != 0 && BlockType == ArithmeticType.Divide))
         {
-            // hasilnya pasti float.
             float leftFloat = FloatType.ParseValue(left);
             float rightFloat = FloatType.ParseValue(right);
             return BlockType switch
@@ -36,7 +48,7 @@ public class ArithmeticOperatorBlock : OperatorBlock
         }
         else
         {
-            // hasilnya pasti integer.
+            // hasilnya pasti integer. (kecuali bagi)
             int leftInt = Integer.ParseValue(left);
             int rightInt = Integer.ParseValue(right);
             return BlockType switch
@@ -85,6 +97,10 @@ public class ArithmeticOperatorBlock : OperatorBlock
         if (value is ArithmeticType arithmeticType)
         {
             BlockType = arithmeticType;
+        }
+        else if (value is ArithmeticOperatorBlock arithmeticOperatorBlock)
+        {
+            BlockType = arithmeticOperatorBlock.BlockType;
         }
         else
         {

@@ -5,7 +5,7 @@ public class Integer : DataType
 {
     public static Integer GetRandomValue()
     {
-        return new Integer { Value = Random.Range(-20, 20) };
+        return new Integer { Value = Random.Range(1, 21) };
     }
 
     public static int ParseValue(object value)

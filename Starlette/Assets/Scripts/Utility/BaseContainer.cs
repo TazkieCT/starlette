@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 // Base abstract class for block containers
 public abstract class BaseBlockContainer : MonoBehaviour
@@ -16,6 +14,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
     [Header("Partner Container")]
     [SerializeField] protected BaseBlockContainer partnerContainer;
     [SerializeField] protected TransferType defaultTransferType = TransferType.Move;
+    [SerializeField] protected bool receiver = true;
 
     protected List<GameObject> blocks = new List<GameObject>();
 
@@ -52,17 +51,22 @@ public abstract class BaseBlockContainer : MonoBehaviour
     {
         if (block == null) return TransferResult.InvalidBlock;
         if (!CanAcceptBlock(block)) return TransferResult.DestinationFull;
+       
 
         // Handle the block based on transfer type
         GameObject blockToAdd = block;
         if (transferType == TransferType.Copy)
         {
             blockToAdd = Instantiate(block);
+            blockToAdd.GetComponent<CodeBlock>().Init(block.GetComponent<CodeBlock>());
         }
         // Add to container
-        blocks.Add(blockToAdd);
         blockToAdd.transform.SetParent(transform);
+        blockToAdd.transform.localPosition = Vector3.zero; // Reset position
+        blockToAdd.transform.localScale = Vector3.one; // Reset scale
+        blocks.Add(blockToAdd);
 
+        
         UpdateBlockPositions();
         return TransferResult.Success;
     }
@@ -100,10 +104,9 @@ public abstract class BaseBlockContainer : MonoBehaviour
     {
         if (partnerContainer == null) return TransferResult.Failed;
         if (partnerContainer == this) return TransferResult.SameContainer;
-
         // Check if partner can accept the block
         Debug.Log(partnerContainer);
-        if (partnerContainer.CanAcceptBlock(block) && partnerContainer is FreeBlockContainer)
+        if (partnerContainer.CanAcceptBlock(block) && partnerContainer.receiver && partnerContainer is FreeBlockContainer)
         {
             // find an empty slot in the partner's block list, then Set the block with the parameter
             // then remove the block from this container list
@@ -112,11 +115,21 @@ public abstract class BaseBlockContainer : MonoBehaviour
             {
                 if (slot.GetBlock() == null)
                 {
-                    slot.SetBlock(block.GetComponent<CodeBlock>());
+                    CodeBlock newBlock = block.GetComponent<CodeBlock>();
+
+
                     if (defaultTransferType == TransferType.Move)
                     {
                         RemoveBlock(block);
                     }
+                    else
+                    {
+                        newBlock = Instantiate(newBlock);
+                        newBlock.Init(block.GetComponent<CodeBlock>());
+                        newBlock.GetComponentInChildren<TextMeshProUGUI>().text = newBlock.ToString();
+                        // Debug.Log($"New Value on block slot: {newBlock.GetComponent<VariableBlock>().GetValue().GetValue()}");
+                    }
+                    slot.SetBlock(newBlock);
                     return TransferResult.Success;
                 }
             }
@@ -125,12 +138,50 @@ public abstract class BaseBlockContainer : MonoBehaviour
         else if (partnerContainer is BlockHolder)
         {
             BlockSlot slot = block.GetComponentInParent<BlockSlot>();
-            slot.Clear();
-            partnerContainer.AddBlock(block);
-            Debug.Log("Moved Block Back");
-            return TransferResult.Success;
+            if (partnerContainer.receiver)
+            {
+                if (slot != null)
+                {
+                    slot.Clear();
+                    partnerContainer.AddBlock(block);
+                    Debug.Log("Moved Block Back");
+                    return TransferResult.Success;
+                }
+                else if (defaultTransferType == TransferType.Move)
+                {
+                    RemoveBlock(block);
+                    Destroy(block);
+                    Debug.Log("Removed Block");
+                    return TransferResult.Success;
+                }
+                else
+                {
+                    partnerContainer.AddBlock(block, defaultTransferType);
+                    return TransferResult.Success;
+                }
+            }
+            else
+            {
+                if (slot != null)
+                {
+                    RemoveBlock(block);
+                    slot.DestroyBlock();
+                    return TransferResult.Success;
+                }
+            }
+
         }
-        Debug.LogError("Fail");
+        else if (!partnerContainer.receiver)
+        {
+            RemoveBlock(block);
+            Destroy(block);
+            Debug.Log("Removed Block");
+        }
+        else
+        {
+            Debug.LogError("Fail");
+
+        }
 
         return TransferResult.DestinationFull;
     }

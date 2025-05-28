@@ -1,10 +1,22 @@
 using System;
+using TMPro;
 using UnityEditor.VersionControl;
 using UnityEngine;
 
 public enum AssignmentType {Assign, AddAsign}
 public class AssignmentOperatorBlock : OperatorBlock
 {
+    protected override void AdditionalAwake()
+    {
+        if (BlockType == AssignmentType.Assign)
+        {
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
+        }
+        else if (BlockType == AssignmentType.AddAsign)
+        {
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "+=";
+        }
+    }
     public AssignmentType BlockType;
     public void SetOperands(CodeBlock leftOperand, CodeBlock rightOperand)
     {
@@ -21,29 +33,38 @@ public class AssignmentOperatorBlock : OperatorBlock
 
             // right operand will always be a CodeBlock
             object value = rightOperandBlock.Evaluate(context);
-            Debug.Log($"Evaluating assignment: {variableName} = {value}");
+            Debug.Log($"Evaluating Assignment: {variableName} to {value}");
             PayloadResultModel result = MatchDataType(variableBlock, value);
             if (!result.Success)
             {
                 Debug.LogError(result.Message);
                 throw new Exception(result.Message);
             }
-            variableBlock.GetValue().Init(result.Payload);
 
-            // Assign the value to the variable in the context
+            // Buat block baru dlu untuk copy hasil variablenya, nanti yang di store ke context itu adalah blck barunya
+            BlockFactory blockFactory = BlockFactory.Instance;
+            GameObject newVariableBlock  = blockFactory.CreateBlock(BlockFactory.GetBlockTypeFromVariables(variableBlock),
+            variableBlock, gameObject.transform.parent);
+
+            LiteralBlock newValue = newVariableBlock.AddComponent<LiteralBlock>();
+            newValue.Init(result.Payload);
+            VariableBlock copiedVariable = newVariableBlock.GetComponent<VariableBlock>();
+            copiedVariable.VariableName = variableName;
+            copiedVariable.SetValue(newValue);
+
             PayloadResultModel declareResult = context.DeclareVariable(variableName);
             if (!declareResult.Success)
             {
                 throw new Exception($"{declareResult.Message}");
             }
-            declareResult = context.AssignVariable(variableName, variableBlock);
+            declareResult = context.AssignVariable(variableName, newVariableBlock.GetComponent<VariableBlock>());
             if (!declareResult.Success)
             {
                 throw new Exception($"{declareResult.Message}");
             }
+            Debug.Log($"Assignment successful: {variableName}, newVariableValue: {newValue.GetValue().GetValue()}");
 
-            
-            return variableBlock;
+            return newVariableBlock.GetComponent<VariableBlock>();
         }
         else
         {
@@ -90,6 +111,10 @@ public class AssignmentOperatorBlock : OperatorBlock
         if (value is AssignmentType assignmentType)
         {
             BlockType = assignmentType;
+        }
+        else if (value is AssignmentOperatorBlock assignmentOperatorBlock)
+        {
+            BlockType = assignmentOperatorBlock.BlockType;
         }
         else
         {

@@ -1,11 +1,15 @@
-
-
-using UnityEngine.UIElements;
-
 public class VariableBlock : CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
+
+    protected override void AdditionalAwake()
+    {
+        if (gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>() != null)
+        {
+            gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = ToString();
+        }
+    }
 
     public LiteralBlock GetValue()
     {
@@ -27,10 +31,11 @@ public class VariableBlock : CodeBlock
 
     public override string ToString()
     {
-        return Value.ToString();
+        return VariableName == "" ? Value.ToString() : VariableName;
     }
     public override void Init(object value)
     {
+
         if (value is DataType dataType)
         {
             Value.Init(dataType);
@@ -43,6 +48,11 @@ public class VariableBlock : CodeBlock
         {
             Value = literalBlock;
             VariableName = literalBlock.ToString();
+        }
+        else if(value is VariableBlock variableBlock)
+        {
+            VariableName = variableBlock.VariableName;
+            Value = variableBlock.Value;
         }
         else
         {

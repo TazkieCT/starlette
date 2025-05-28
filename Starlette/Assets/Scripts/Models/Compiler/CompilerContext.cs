@@ -9,7 +9,10 @@ public class CompilerContext : MonoBehaviour
 {
     private Dictionary<string, VariableBlock> Variables = new();
 
-
+    public List<VariableBlock> GetAllVariables()
+    {
+        return new List<VariableBlock>(Variables.Values);
+    }
     public void DeclareAndAssignVariable(string name, VariableBlock value = null)
     {
         if (value == null)
