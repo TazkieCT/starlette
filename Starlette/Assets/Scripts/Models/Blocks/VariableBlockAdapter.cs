@@ -10,12 +10,15 @@ public class VariableBlockAdapter : VariableBlock
     [SerializeField] private TMP_InputField variableNameText;
     [SerializeField] private TMP_Dropdown dropdown;
 
-    public void Awake()
+    protected override void AdditionalAwake()
     {
-        Value.Init(DataType.CreateDataType<int>()); // Default to Integer type
-        if(variableNameText == null) variableNameText = GetComponentInChildren<TMP_InputField>();
+        Value = gameObject.AddComponent<LiteralBlock>();
+        Value.Init(DataType.CreateDataType<int>()); 
+
+        if (variableNameText == null) variableNameText = GetComponentInChildren<TMP_InputField>();
         if(dropdown == null) dropdown = GetComponentInChildren<TMP_Dropdown>();
-        if(variableNameText == null || dropdown == null)
+        
+        if (variableNameText == null || dropdown == null)
         {
             Debug.LogError("VariableBlockAdapter: Missing TMP_InputField or TMP_Dropdown component.");
             return;

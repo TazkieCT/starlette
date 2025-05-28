@@ -1,8 +1,17 @@
+using TMPro;
+
 public enum ParenthesisType { Open, Close }
 public class ParenthesisBlock : CodeBlock
 {
-    public ParenthesisType Type { get; private set; }
+    public ParenthesisType Type;
     public int Precedence => 4;
+    protected override void AdditionalAwake()
+    {
+        if (gameObject.GetComponentInChildren<TextMeshProUGUI>() != null)
+        {
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
+        }
+    } 
     public override object Evaluate(CompilerContext context = null)
     {
         // Parentheses do not change the value, they just group expressions

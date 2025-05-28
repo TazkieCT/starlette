@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,18 +25,14 @@ public class SecondPart : MonoBehaviour
             Debug.LogError("First or Second part GameObject is not assigned.");
             return;
         }
-
-        firstPart.SetActive(true);
-        secondPart.SetActive(false);
-
         SetUpLeftPart();
         SetUpRightPart();
     }
 
     private void SetUpRightPart()
     {
-        BlockHolder holder = secondPart.GetComponentInChildren<BlockHolder>();
-        SetUpVariableBlocks(holder);
+        FreeBlockContainer sequences = secondPart.GetComponentInChildren<FreeBlockContainer>();
+        SetUpSequences(sequences);
     }
 
     private void SetUpLeftPart()
@@ -112,6 +108,7 @@ public class SecondPart : MonoBehaviour
         float x = -180.0f + container.GetSpacing();
         foreach (ArithmeticType type in System.Enum.GetValues(typeof(ArithmeticType)))
         {
+            if (type == ArithmeticType.Random) continue; // skip Random type
             ArithmeticOperatorBlock arithmeticBlock = blockFactory.CreateBlock(BlockType.ArithmeticOperator, type, container.transform).GetComponent<ArithmeticOperatorBlock>();
             arithmeticBlock.Init(type);
             arithmeticBlock.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = arithmeticBlock.ToString();
@@ -122,10 +119,12 @@ public class SecondPart : MonoBehaviour
 
     private void SetUpComparisonBlock(FreeBlockContainer container)
     {
+    
         float x = -180.0f + container.GetSpacing();
         foreach (ComparisonType type in System.Enum.GetValues(typeof(ComparisonType)))
         {
-            if( type == ComparisonType.LessEqual || type == ComparisonType.GreaterEqual || type == ComparisonType.NotEqual) continue; 
+            if (type == ComparisonType.Random) continue; // skip Random type
+            if (type == ComparisonType.LessEqual || type == ComparisonType.GreaterEqual || type == ComparisonType.NotEqual) continue; 
             ComparisonOperatorBlock comparisonBlock = blockFactory.CreateBlock(BlockType.ComparisonOperator, type, container.transform).GetComponent<ComparisonOperatorBlock>();
             comparisonBlock.Init(type);
             comparisonBlock.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = comparisonBlock.ToString();
@@ -145,7 +144,7 @@ public class SecondPart : MonoBehaviour
         }
         List<GameObject> blocks = holder.GetAllBlocks();
         // Debug.Log($"Executing sequence with {blocks.Count} blocks.");
-        VariableBlock variableBlock = firstPart.GetComponentInChildren<VariableBlock>();
+        VariableBlockAdapter variableBlock = firstPart.GetComponentInChildren<VariableBlockAdapter>();
         if (variableBlock == null)
         {
             Debug.LogError("First block is not a VariableBlock.");
@@ -177,7 +176,7 @@ public class SecondPart : MonoBehaviour
                 Debug.LogError($"Block {block.name} is not a valid CodeBlock.");
                 return;
             }
-            Debug.Log($"Adding block {codeBlock.ToString()} to code blocks.");
+            // Debug.Log($"Adding block {codeBlock.ToString()} to code blocks.");
             codeBlocks.Add(codeBlock);
 
         }
@@ -205,10 +204,8 @@ public class SecondPart : MonoBehaviour
                 Debug.LogError("BlockHolder not found in the second part.");
                 return;
             }
-
-            BlockType blockType = BlockFactory.GetBlockTypeFromVariables(blockResult);
-            GameObject newBlock = blockFactory.CreateBlock(blockType, blockResult, transform);
-            secondHolder.AddBlock(newBlock);
+            //karena dari assignmentnya udah ngasih block yang baru, jadi kita tinggal ambil aja trus cantolin ke holder
+            secondHolder.AddBlock(blockResult.gameObject);
         }
         ResetContainerState(holder);
     }
@@ -229,7 +226,7 @@ public class SecondPart : MonoBehaviour
         newAdapter.transform.position = adapter.transform.position;
         newAdapter.transform.SetParent(adapter.transform.parent);
         // destroy the old adapter
-        Debug.Log($"Destroying adapter {adapter.name} and replacing it with a new VariableAdapter.");
+        // Debug.Log($"Destroying adapter {adapter.name} and replacing it with a new VariableAdapter.");
         Destroy(adapter);
         List<GameObject> blocks = container.GetAllBlocks();
 
@@ -244,21 +241,84 @@ public class SecondPart : MonoBehaviour
         container.SetBlocks(blocks);
     }
 
-
-    private void SetUpVariableBlocks(BlockHolder holder)
+    private void SetUpSequences(FreeBlockContainer container)
     {
-        List<VariableBlock> variableBlocks = context.GetAllVariables();
-        if (variableBlocks.Count == 0)
+        List<GameObject> codeBlocks = container.GetAllBlocks();
+        if (codeBlocks.Count == 0)
         {
-            Debug.LogWarning("No variable blocks found in the context.");
+            Debug.LogError($"No code blocks found in the {container.gameObject.name} ");
+            return;
+        }
+        foreach (GameObject block in container.GetAllBlocks())
+        {
+            if (block.GetComponent<CodeBlock>() != null)
+            {
+                Button b = block.GetComponent<Button>();
+                if (b == null)
+                {
+                    Debug.LogError($"Block {block.name} does not have a Button component.");
+                    continue;
+                }
+                b.onClick.RemoveAllListeners();
+
+            }
+            if (block.GetComponent<ParenthesisBlock>() != null)
+            {
+                block.GetComponentInChildren<TextMeshProUGUI>().text = block.GetComponent<ParenthesisBlock>().ToString();
+            }
+        }
+    }
+
+    public void ExecuteSequence(FreeBlockContainer container)
+    {
+        List<GameObject> blocks = container.GetAllBlocks();
+        if (blocks.Count == 0)
+        {
+            Debug.LogError("ExecuteSequence: No blocks to execute in the sequence.");
             return;
         }
 
-        foreach (VariableBlock block in variableBlocks)
+        List<CodeBlock> codeBlocks = new List<CodeBlock>();
+        foreach (GameObject block in blocks)
         {
-            holder.AddBlock(block.gameObject);
+            if (block.GetComponent<BlockSlot>() != null)
+            {
+                Debug.Log($"Block {block.name} is a BlockSlot, retrieving its block.");
+                codeBlocks.Add(block.GetComponent<BlockSlot>().GetBlock());
+                continue;
+            }
+
+            CodeBlock codeBlock = block.GetComponent<CodeBlock>();
+            if (codeBlock == null)
+            {
+                Debug.LogError($"Block {block.name} is not a valid CodeBlock.");
+                return;
+            }
+            codeBlocks.Add(codeBlock);
+
         }
+        codeBlocks = ExpressionTreeBuilder.ToPostfix(codeBlocks);
+        CodeBlock root = ExpressionTreeBuilder.BuildExpressionTree(codeBlocks);
+        if (codeBlocks.Count == 0)
+        {
+            Debug.LogError("ExecuteSequence: No valid code blocks found after conversion to postfix.");
+            return;
+        }
+
+        object result = root.Evaluate(context);
+        if(result is bool boolResult)
+        {
+            if (boolResult) Debug.Log("HORE BENAR GOBLOK");
+        }
+        else
+        {
+            Debug.LogError("ExecuteSequence: Result is not a valid CodeBlock.");
+        }
+
+
+
     }
+
     public void ShowSecondPart()
     {
         firstPart.SetActive(false);

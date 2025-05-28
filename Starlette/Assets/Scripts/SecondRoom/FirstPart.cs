@@ -145,8 +145,6 @@ public class FirstPart : MonoBehaviour
             Debug.LogError("Failed to build expression tree from blocks.");
             return;
         }
-
-
         assignmentObject.setLeftChild(variableBlock);
         assignmentObject.setRightChild(root);
 

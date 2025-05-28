@@ -1,15 +1,19 @@
 
 using System;
+using TMPro;
+using UnityEngine;
 
 public enum LogicalOperatorType
 {
     AND,
-    OR
+    OR,
+    Random
 }
 public class LogicalOperator : OperatorBlock
 {
     public LogicalOperatorType Operator;
 
+    
     public LogicalOperator(CodeBlock left, CodeBlock right, LogicalOperatorType op)
     {
         leftOperandBlock = left;
@@ -21,7 +25,7 @@ public class LogicalOperator : OperatorBlock
     {
         bool leftValue = (bool)leftOperandBlock.Evaluate(context);
         bool rightValue = (bool)rightOperandBlock.Evaluate(context);
-
+        Debug.Log($"Evaluating Logical: {leftValue} {Operator} {rightValue}");
         return Operator switch
         {
             LogicalOperatorType.AND => leftValue && rightValue,
@@ -61,5 +65,15 @@ public class LogicalOperator : OperatorBlock
             throw new ArgumentException("Invalid value type for LogicalOperator");
         }
     }
+
+    protected override void AdditionalAwake()
+    {
+        if (Operator == LogicalOperatorType.Random)
+        {
+            Operator = (LogicalOperatorType)UnityEngine.Random.Range(0, 2);
+            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
+        }   
+    }
+
     public override int Precedence => 1;
 }

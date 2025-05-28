@@ -1,11 +1,15 @@
-
-
-using UnityEngine.UIElements;
-
 public class VariableBlock : CodeBlock
 {
     public string VariableName { get; set; }
     public LiteralBlock Value;
+
+    protected override void AdditionalAwake()
+    {
+        if (gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>() != null)
+        {
+            gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = ToString();
+        }
+    }
 
     public LiteralBlock GetValue()
     {

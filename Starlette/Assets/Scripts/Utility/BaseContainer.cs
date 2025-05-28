@@ -117,7 +117,7 @@ public abstract class BaseBlockContainer : MonoBehaviour
                 {
                     CodeBlock newBlock = block.GetComponent<CodeBlock>();
 
-                    
+
                     if (defaultTransferType == TransferType.Move)
                     {
                         RemoveBlock(block);
@@ -126,6 +126,8 @@ public abstract class BaseBlockContainer : MonoBehaviour
                     {
                         newBlock = Instantiate(newBlock);
                         newBlock.Init(block.GetComponent<CodeBlock>());
+                        newBlock.GetComponentInChildren<TextMeshProUGUI>().text = newBlock.ToString();
+                        // Debug.Log($"New Value on block slot: {newBlock.GetComponent<VariableBlock>().GetValue().GetValue()}");
                     }
                     slot.SetBlock(newBlock);
                     return TransferResult.Success;
@@ -136,31 +138,38 @@ public abstract class BaseBlockContainer : MonoBehaviour
         else if (partnerContainer is BlockHolder)
         {
             BlockSlot slot = block.GetComponentInParent<BlockSlot>();
-            if (slot != null && partnerContainer.receiver)
+            if (partnerContainer.receiver)
             {
-                slot.Clear();
-                partnerContainer.AddBlock(block);
-                Debug.Log("Moved Block Back");
-                return TransferResult.Success;
-            }
-            else if (slot != null && !partnerContainer.receiver)
-            {
-                RemoveBlock(block);
-                slot.DestroyBlock();
-                return TransferResult.Success;
-            }
-            if (defaultTransferType == TransferType.Move)
-            {
-                RemoveBlock(block);
-                Destroy(block);
-                Debug.Log("Removed Block");
-                return TransferResult.Success;
+                if (slot != null)
+                {
+                    slot.Clear();
+                    partnerContainer.AddBlock(block);
+                    Debug.Log("Moved Block Back");
+                    return TransferResult.Success;
+                }
+                else if (defaultTransferType == TransferType.Move)
+                {
+                    RemoveBlock(block);
+                    Destroy(block);
+                    Debug.Log("Removed Block");
+                    return TransferResult.Success;
+                }
+                else
+                {
+                    partnerContainer.AddBlock(block, defaultTransferType);
+                    return TransferResult.Success;
+                }
             }
             else
             {
-                partnerContainer.AddBlock(block, defaultTransferType);
-                return TransferResult.Success;
+                if (slot != null)
+                {
+                    RemoveBlock(block);
+                    slot.DestroyBlock();
+                    return TransferResult.Success;
+                }
             }
+
         }
         else if (!partnerContainer.receiver)
         {

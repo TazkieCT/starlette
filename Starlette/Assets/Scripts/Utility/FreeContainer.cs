@@ -12,15 +12,13 @@ public class FreeBlockContainer : BaseBlockContainer
     [SerializeField] private float gridSize = 0.5f;
 
     private float totalWidth = 0f;
-    override protected void Start()
+    public void Awake()
     {
         // get all children then add it one by one
         foreach (Transform child in transform)
         {
-            if (child.gameObject.activeInHierarchy)
-            {
-                blocks.Add(child.gameObject);
-            }
+            // Debug.Log($"Adding child: {child.name}");
+            blocks.Add(child.gameObject);
         }
     }
 

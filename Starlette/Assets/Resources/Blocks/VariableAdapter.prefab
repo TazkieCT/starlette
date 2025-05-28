@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90be755be56125b45b1615106a3d3b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Value: {fileID: 7070960644813162971, guid: b91165f3a74daa44696e46882b4de753, type: 3}
+  Value: {fileID: 0}
   variableNameText: {fileID: 2674771726260030773}
   dropdown: {fileID: 3596144232708229347}
 --- !u!1 &3903913902021120408

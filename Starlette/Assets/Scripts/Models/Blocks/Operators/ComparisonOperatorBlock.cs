@@ -1,21 +1,30 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public enum ComparisonType
 {
-    Equal, Less, Greater, LessEqual, GreaterEqual, NotEqual
+    Equal, Less, Greater, LessEqual, GreaterEqual, NotEqual, Random
 }
 
 public class ComparisonOperatorBlock : OperatorBlock
 {
     public ComparisonType ComparisonType;
 
+    protected override void AdditionalAwake()
+    {
+        if (ComparisonType == ComparisonType.Random)
+        {
+            ComparisonType = (ComparisonType)UnityEngine.Random.Range(0, 6);
+        }
+        gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
+    }
 
     public override object Evaluate(CompilerContext context)
     {
-        var leftValue = leftOperandBlock.Evaluate(context);
-        var rightValue = rightOperandBlock.Evaluate(context);
-
+        float leftValue = FloatType.ParseValue(leftOperandBlock.Evaluate(context));
+        float rightValue = FloatType.ParseValue(rightOperandBlock.Evaluate(context));
+        Debug.Log($"Evaluating Comparison: {leftValue} {ComparisonType} {rightValue}");
         return ComparisonType switch
         {
             ComparisonType.Equal => leftValue.Equals(rightValue),
