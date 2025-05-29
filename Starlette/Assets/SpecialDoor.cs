@@ -18,6 +18,20 @@ public class SpecialDoor : MonoBehaviour,Interactable
         {
             Debug.Log("blm hidden");
         }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            player.transform.position = spawnPoint.transform.position;
+
+            Vector2 faceDirection = Vector2.up;
+            player.GetComponent<PlayerMovement>().SetFacingDirection(faceDirection);
+            Debug.Log("Interacting with UserTeleporter");
+        }
+        else
+        {
+            Debug.LogWarning("Player not found");
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

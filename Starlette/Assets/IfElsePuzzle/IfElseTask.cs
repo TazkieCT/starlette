@@ -212,7 +212,6 @@ if (section == {blockButton[0].GetComponentInChildren<TextMeshProUGUI>().text}) 
             }
             else
             {
-                Debug.Log("Belum done");
             }
 
             yield return new WaitForSeconds(0.5f);
@@ -236,9 +235,9 @@ if (section == {blockButton[0].GetComponentInChildren<TextMeshProUGUI>().text}) 
 
     public void SetFindHiddenPuzzle()
     {
+        Start();
         errorInterface.SetActive(true);
         successInterface.SetActive(false);
-        Start();
     }
 
     public bool getIsComplete()

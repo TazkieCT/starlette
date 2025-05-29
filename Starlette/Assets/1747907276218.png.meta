@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 80e292e6dfbb6f94db96d893afcd23db
+guid: 42f48fb244cf04d4d9376deff4e9a94f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 10, y: 35, z: 8, w: 31}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cross-icon_0
+      name: 1747907276218_0
       rect:
         serializedVersion: 2
-        x: 599
-        y: 598
-        width: 803
-        height: 804
+        x: 11
+        y: 36
+        width: 108
+        height: 60
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,30 +112,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c873ead97057254c8874e14d4ef2005
-      internalID: -208047614
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cross-icon_1
-      rect:
-        serializedVersion: 2
-        x: 866
-        y: 65
-        width: 147
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6361f85393bf7884b9b2b8911b297bd6
-      internalID: 739726193
+      spriteID: ae5284918ffa9f4419e1b6a71471e113
+      internalID: 193789734
       vertices: []
       indices: 
       edges: []
@@ -145,7 +123,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -154,8 +132,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      cross-icon_0: -208047614
-      cross-icon_1: 739726193
+      1747907276218_0: 193789734
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

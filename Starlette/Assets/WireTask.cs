@@ -40,16 +40,23 @@ public class WireTask : MonoBehaviour
                 Debug.Log("Done");
                 nextBtn.SetActive(true);
                 toolBag.SetActive(true);
+
                 interactRange.SetActive(false);
-                doorInteractRange.SetActive(true);
-                setStatusWirePuzzleInterface(false);
-                gameController.SetState("FreeRoam");
                 monitor.GetComponent<DoorMonitorRoomOne>().enabled = false;
                 monitor.layer = LayerMask.NameToLayer("UI");
+
+                doorInteractRange.SetActive(true);
+                doorInteractRange.transform.Find("InteractRange").gameObject.SetActive(true);
+                doorInteractRange.layer = LayerMask.NameToLayer("Interactable");
+
+                setStatusWirePuzzleInterface(false);
+
+                gameController.SetState("FreeRoam");
             }
             else
             {
                 Debug.Log("Belum done");
+                doorInteractRange.layer = LayerMask.NameToLayer("UI");
             }
             yield return new WaitForSeconds(0.5f);
         }
