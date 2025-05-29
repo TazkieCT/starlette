@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FirstPart : MonoBehaviour
 {
@@ -30,6 +31,11 @@ public class FirstPart : MonoBehaviour
             Debug.LogError("BlockHolder component not found in children.");
             return;
         }
+
+        AssignmentOperatorBlock freeBlockContainer = GetComponentInChildren<AssignmentOperatorBlock>();
+        Button operatorButton = freeBlockContainer.gameObject.GetComponent<Button>();
+        operatorButton.onClick.RemoveAllListeners();
+
         for (int i = 0; i < 3; i++)
         {
             RandomizeBlocks(holder);
@@ -149,6 +155,12 @@ public class FirstPart : MonoBehaviour
         assignmentObject.setRightChild(root);
 
         object result = assignmentObject.Evaluate(context);
+
+        if (result is VariableBlock a)
+        {
+            Destroy(a.gameObject);
+        }
+
         ResetContainerState(holder);
     }
 
