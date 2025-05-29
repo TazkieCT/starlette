@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -14,6 +14,7 @@ TagManager:
   - 
   - 
   - 
+  - Interactable
   - 
   - 
   - 
@@ -22,8 +23,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Player
   - 
   - 
   - 
@@ -41,6 +41,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 142486331
+    locked: 0
+  - name: Foreground
+    uniqueID: 1478093129
+    locked: 0
+  - name: SolidObject
+    uniqueID: 2228842835
+    locked: 0
+  - name: Decoration
+    uniqueID: 4083264619
+    locked: 0
+  - name: Interactable
+    uniqueID: 399838357
+    locked: 0
+  - name: Player
+    uniqueID: 948776629
+    locked: 0
+  - name: Canvas
+    uniqueID: 4271971237
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
@@ -50,27 +71,3 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 

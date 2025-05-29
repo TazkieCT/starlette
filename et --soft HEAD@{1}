@@ -1,0 +1,27 @@
+[33mbc1db2f6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mvincent_branch[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m34945c3a[m HEAD@{1}: reset: moving to HEAD~1
+[33m93f0e9d8[m[33m ([m[1;31morigin/vincent_branch[m[33m)[m HEAD@{2}: commit: masukin meta file
+[33m34945c3a[m HEAD@{3}: commit: masukin meta file
+[33mbc1db2f6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mvincent_branch[m[33m)[m HEAD@{4}: pull origin main: Fast-forward
+[33md588e9f1[m HEAD@{5}: commit: test
+[33mbe142f49[m HEAD@{6}: reset: moving to HEAD~1
+[33mc5f59bcf[m HEAD@{7}: reset: moving to HEAD~1
+[33m857a9bf1[m HEAD@{8}: reset: moving to HEAD~1
+[33m02e24c93[m HEAD@{9}: reset: moving to HEAD~1
+[33m9f37771d[m HEAD@{10}: commit: test
+[33m02e24c93[m HEAD@{11}: reset: moving to HEAD~1
+[33m8341d117[m HEAD@{12}: commit: tesing
+[33m02e24c93[m HEAD@{13}: reset: moving to HEAD~1
+[33m59666c75[m HEAD@{14}: commit: tesing
+[33m02e24c93[m HEAD@{15}: commit: tesing
+[33m857a9bf1[m HEAD@{16}: reset: moving to HEAD~1
+[33m651564f2[m HEAD@{17}: commit: tesing
+[33m857a9bf1[m HEAD@{18}: commit: tesing
+[33mc5f59bcf[m HEAD@{19}: reset: moving to HEAD~1
+[33m25a203cc[m HEAD@{20}: commit: tesing
+[33mc5f59bcf[m HEAD@{21}: reset: moving to HEAD~1
+[33meb3877c2[m HEAD@{22}: commit: tesing
+[33mc5f59bcf[m HEAD@{23}: commit: Dialog,Pause,ingameinterface,oxygen,interact
+[33mbe142f49[m HEAD@{24}: commit: Player Movement and Animation
+[33m27cbd665[m[33m ([m[1;31morigin/tazkie_branch[m[33m, [m[1;32mmain[m[33m)[m HEAD@{25}: checkout: moving from main to vincent_branch
+[33m27cbd665[m[33m ([m[1;31morigin/tazkie_branch[m[33m, [m[1;32mmain[m[33m)[m HEAD@{26}: clone: from https://github.com/TazkieCT/starlette.git
