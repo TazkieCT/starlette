@@ -31,3 +31,7 @@ Starlette/sysinfo.txt
 Starlette/*.apk
 Starlette/*.aab
 Starlette/*.unitypackage
+
+# Ignore Firebase SDK
+Starlette/Assets/Firebase/
+Starlette/Assets/StreamingAssets/google-services.json
