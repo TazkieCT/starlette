@@ -1,12 +1,24 @@
 using UnityEngine;
 
-public class DoorRoomOne : MonoBehaviour, Interactable
+public class DoorRoom : MonoBehaviour, Interactable
 {
     public GameObject spawnPoint;
     public GameObject character;
+    public RoomID currentRoom;
+
     public void Interact()
     {
-        character.transform.position = spawnPoint.transform.position;
-    }
+        var roomData = RoomProgressManager.Instance.GetRoomData(currentRoom);
 
+        if (roomData.progress >= 100f)
+        {
+            character.transform.position = spawnPoint.transform.position;
+            Debug.Log("Move to next room.");
+        }
+        else
+        {
+            Debug.Log($"Cant move to next room. Progress {roomData.progress}%");
+            //Nanti disini kita panggil dialogue
+        }
+    }
 }
