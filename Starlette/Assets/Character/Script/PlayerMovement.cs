@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Hello");
+            //Debug.Log("Item interact");
             Item item = inventoryManager.getSelectedItem();
 
             item.Use();
