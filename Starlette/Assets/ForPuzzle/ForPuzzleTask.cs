@@ -25,15 +25,20 @@ public class ForPuzzleTask : MonoBehaviour
         public string packetOp;
         public int packetIncDec;
     }
-
+    public string puzzleID;
+    public RoomID roomID;
     void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         answer = new Answer();
         GenerateAnswer();
         GenerateBlock();
     }
 
-
+    public void Solve()
+    {
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
     public async void RunCode()
     {
         successErrorManagerScreen.SetCurrentScreen(forPuzzleScreen);
@@ -57,6 +62,7 @@ public class ForPuzzleTask : MonoBehaviour
         }
         else
         {
+            Solve();
             sendingPacketScreen.SetActive(false);
             forPuzzleScreen.SetActive(false);
             successErrorManagerScreen.SetStatusSuccesScreen(true);
