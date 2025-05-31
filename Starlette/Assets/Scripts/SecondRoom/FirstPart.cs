@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.U2D.IK;
 using UnityEngine.UI;
 
 public class FirstPart : MonoBehaviour
@@ -8,8 +9,13 @@ public class FirstPart : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     BlockFactory factory;
     [SerializeField] private CompilerContext context;
+    public SuccessErrorManagerScreen successErrorManagerScreen;
+    public string puzzleID;
+    public RoomID roomID;
+    private bool isDone = false;
     void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         if (context == null)
         {
             context = GetComponentInParent<CompilerContext>();
@@ -51,7 +57,16 @@ public class FirstPart : MonoBehaviour
         // GameObject intBlock2 = factory.CreateBlock(BlockType.Literal_Int, Integer.GetRandomValue(), holder.transform);
         // holder.AddBlock(intBlock2);
     }
+    public void Solve()
+    {
+        isDone = true;
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
 
+    public bool GetIsDone()
+    {
+        return isDone;
+    }
     private void RandomizeBlocks(BlockHolder holder)
     {
 
@@ -91,6 +106,7 @@ public class FirstPart : MonoBehaviour
 
     public void ExecuteSequence(BaseBlockContainer holder)
     {
+        successErrorManagerScreen.SetCurrentScreen(this.gameObject.transform.parent.gameObject);
         // Implementation for executing the code block
         if (holder == null)
         {
@@ -109,6 +125,7 @@ public class FirstPart : MonoBehaviour
         if (variableCheck.Success == false)
         {
             // open panel
+            successErrorManagerScreen.SetStatusErrorScreen(true, $"{variableCheck.Message}");
             Debug.LogError($"{variableCheck.Message}");
             return;
         }
@@ -159,9 +176,24 @@ public class FirstPart : MonoBehaviour
         if (result is VariableBlock a)
         {
             Destroy(a.gameObject);
+            ResetContainerState(holder);
+        }
+        else if (result is PayloadResultModel payloadResultModel)
+        {
+            if (!payloadResultModel.Success)
+            {
+                successErrorManagerScreen.SetStatusErrorScreen(true, payloadResultModel.Message);
+                Destroy(((VariableBlock)payloadResultModel.Payload).gameObject);
+            }
         }
 
-        ResetContainerState(holder);
+        if (gameObject.GetComponentInChildren<BlockHolder>().GetAllBlocks().Count == 0)
+        {
+            successErrorManagerScreen.SetStatusSuccesScreen(true);
+            this.gameObject.SetActive(false);
+            Solve();
+        }
+
     }
 
 

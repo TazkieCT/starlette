@@ -16,40 +16,40 @@ public class DialogTextDB : ScriptableObject
                     { 
                         DialogueID.Dialogue1, new List<string> {
                         "Where is everyone...? Why am I the only one here?",
-                        "No signal… figures. Whatever happened, we’re way too far out.",
+                        "No signalï¿½ figures. Whatever happened, weï¿½re way too far out.",
                         "I need to find another way. Maybe there's something still working around here.",
                         }
                     },
                     { 
                         DialogueID.Dialogue2, new List<string> {
-                        "These mechanisms... they’ve been completely torn apart. What the hell happened here?",
-                        "An AI assistant? Maybe you're the only help I’ve got right now..."
+                        "These mechanisms... theyï¿½ve been completely torn apart. What the hell happened here?",
+                        "An AI assistant? Maybe you're the only help Iï¿½ve got right now..."
                         }
                     },
                     {
                         DialogueID.Success, new List<string> {
-                        "Alright... something's working again. One step at a time. Let’s keep moving.",
+                        "Alright... something's working again. One step at a time. Letï¿½s keep moving.",
                         }
                     },
                 }
             },
             {
-                RoomID.Room2, new Dictionary<DialogueID, List<string>>
+                RoomID.Room2Part1, new Dictionary<DialogueID, List<string>>
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "The air’s thin... I need to move fast.",
-                        "These systems... they’re linked. One mistake could throw off the whole thing.",
+                        "The airï¿½s thin... I need to move fast.",
+                        "These systems... theyï¿½re linked. One mistake could throw off the whole thing.",
                         }
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "Come on, think. I’ve never done this before, but someone has to try.",
+                        "Come on, think. Iï¿½ve never done this before, but someone has to try.",
                         }
                     },
                     {
                         DialogueID.Success, new List<string> {
-                        "That should do it. Wait... what’s that on the floor?",
+                        "That should do it. Wait... whatï¿½s that on the floor?",
                         }
                     },
                     {
@@ -74,22 +74,22 @@ public class DialogTextDB : ScriptableObject
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "Why do I feel like I’ve done this before? I know I haven’t... have I?",
+                        "Why do I feel like Iï¿½ve done this before? I know I havenï¿½t... have I?",
                         }
                     },
                     {
                         DialogueID.Success, new List<string> {
-                        "Damn it. It’s like this room is trying to trap me.",
+                        "Damn it. Itï¿½s like this room is trying to trap me.",
                         }
                     },
                     {
                         DialogueID.Dialogue3, new List<string> {
-                        "Okay. Progress. But that chill in my spine isn’t going away.",
+                        "Okay. Progress. But that chill in my spine isnï¿½t going away.",
                         }
                     },
                     {
                         DialogueID.Dialogue4, new List<string> {
-                        "Let’s see what’s next.",
+                        "Letï¿½s see whatï¿½s next.",
                         }
                     },
                 }
@@ -99,29 +99,29 @@ public class DialogTextDB : ScriptableObject
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "That sound... it’s heavier here. Like something deeper is going on.",
+                        "That sound... itï¿½s heavier here. Like something deeper is going on.",
                         "These paths... different colors, different directions. Is this some kind of test?",
                         }
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "What the...? My reflection... is late. This isn’t just my mind playing tricks.",
+                        "What the...? My reflection... is late. This isnï¿½t just my mind playing tricks.",
                         }
                     },
                     {
                         DialogueID.Dialogue3, new List<string> { //Saat lagi puzzle
-                        "These system logs… referencing things that haven’t happened yet? How is that even possible?",
+                        "These system logsï¿½ referencing things that havenï¿½t happened yet? How is that even possible?",
                         }
                     },
                     {
                         DialogueID.Dialogue4, new List<string> {
-                        "Hey—wait! What happened to you...? No... they’re not real. They can't be real.",
+                        "Heyï¿½wait! What happened to you...? No... theyï¿½re not real. They can't be real.",
                         }
                     },
                     {
                         DialogueID.Dialogue5, new List<string> {
-                        "Hold on... this wall—it doesn’t match. Something’s hidden here.",
-                        "Whatever’s on the other side… I need to know. I can’t stop now.",
+                        "Hold on... this wallï¿½it doesnï¿½t match. Somethingï¿½s hidden here.",
+                        "Whateverï¿½s on the other sideï¿½ I need to know. I canï¿½t stop now.",
                         }
                     },
                 }
@@ -131,37 +131,37 @@ public class DialogTextDB : ScriptableObject
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "Everything in here... it’s looping. Like it’s alive and stuck in its own memory.",
+                        "Everything in here... itï¿½s looping. Like itï¿½s alive and stuck in its own memory.",
                         }
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "No, no... I’ve seen this. I’ve walked this path before. Haven’t I?",
-                        "There’s something wrong in my mind. Like I’m sharing space with... with someone else.",
-                        "Those aren’t reflections. They're echoes. Versions of me that never made it out?"
+                        "No, no... Iï¿½ve seen this. Iï¿½ve walked this path before. Havenï¿½t I?",
+                        "Thereï¿½s something wrong in my mind. Like Iï¿½m sharing space with... with someone else.",
+                        "Those arenï¿½t reflections. They're echoes. Versions of me that never made it out?"
                         }
                     },
                     {
                         DialogueID.Success, new List<string> {
-                        "Damn it. It’s like this room is trying to trap me.",
+                        "Damn it. Itï¿½s like this room is trying to trap me.",
                         }
                     },
                     {
                         DialogueID.Dialogue3, new List<string> {
-                        "These inputs... they’re mimicking past events. This isn’t just a loop—it’s a memory trap.",
+                        "These inputs... theyï¿½re mimicking past events. This isnï¿½t just a loopï¿½itï¿½s a memory trap.",
                         "Okay... focus. Code is real. Code is real.",
                         }
                     },
                     {
                         DialogueID.Dialogue4, new List<string> { //Text To Choose Decision
-                        "The capsule... it’s active. I could leave. I could just—go home.",
-                        "But… if I go now, I may never know what happened. Why everyone’s gone. Why I’m still here.",
+                        "The capsule... itï¿½s active. I could leave. I could justï¿½go home.",
+                        "Butï¿½ if I go now, I may never know what happened. Why everyoneï¿½s gone. Why Iï¿½m still here.",
                         "This might be my only chance to find the truth.",
                         }
                     },
                     {
                         DialogueID.Dialogue5, new List<string> { // Ending 2 (BAD ENDING)
-                        "I’ve seen enough. I can’t take this anymore... maybe it’s better not knowing.",
+                        "Iï¿½ve seen enough. I canï¿½t take this anymore... maybe itï¿½s better not knowing.",
                         }
                     },
                     {
@@ -176,13 +176,13 @@ public class DialogTextDB : ScriptableObject
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "This was the room we used to gather... where we shared stories, laughed…",
-                        "They were just here. It’s like they vanished mid-sentence."
+                        "This was the room we used to gather... where we shared stories, laughedï¿½",
+                        "They were just here. Itï¿½s like they vanished mid-sentence."
                         }
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "All the pieces from before... they’re here. Everything connects.",
+                        "All the pieces from before... theyï¿½re here. Everything connects.",
                         }
                     },
                     {
@@ -192,7 +192,7 @@ public class DialogTextDB : ScriptableObject
                     },
                     {
                         DialogueID.Dialogue3, new List<string> {
-                        "The seventh room. That’s where this ends. Or maybe… where it all began.",
+                        "The seventh room. Thatï¿½s where this ends. Or maybeï¿½ where it all began.",
                         "I need to know the truth. No more running.",
                         }
                     },
@@ -203,12 +203,12 @@ public class DialogTextDB : ScriptableObject
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "This isn’t working. I need to find another clue.",
+                        "This isnï¿½t working. I need to find another clue.",
                         }
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "Something’s off. I’ll come back to this.",
+                        "Somethingï¿½s off. Iï¿½ll come back to this.",
                         }
                     },
                     {
