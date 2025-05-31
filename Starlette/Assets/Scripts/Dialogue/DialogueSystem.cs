@@ -53,7 +53,11 @@ public class DialogueSystem : MonoBehaviour
     public void StartDialogue(RoomID room, DialogueID dialogue)
     {
         if (playerMovement != null)
+        {
             playerMovement.canMove = false;
+            GameObject gameInterface = GameObject.Find("Toolbar");
+            gameInterface.SetActive(false);
+        }
 
         dialogueLines = dialogDB.GetDialogueLines(room, dialogue);
 
@@ -121,7 +125,13 @@ public class DialogueSystem : MonoBehaviour
     {
         dialogueCanvas.enabled = false;
         if (playerMovement != null)
+        {
+            Debug.Log("tes");
             playerMovement.canMove = true;
+            GameObject gameInterface = GameObject.Find("Inventory").transform.GetChild(1).gameObject;
+            gameInterface.SetActive(true);
+        }
+
     }
 
 }

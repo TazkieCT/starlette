@@ -12,12 +12,19 @@ public class TutorialPuzzle : MonoBehaviour
     ArrayList listUserChoice;
     public TabletManager tabletManager;
     private string answer = "include, main, scanf, printf, return";
+    public string puzzleID;
+    public RoomID roomID;
     void Start()
     {
         listUserChoice = new ArrayList();
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
     }
 
-  
+
+    public void Solve()
+    {
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
 
     public void addChoice(TextMeshProUGUI choice)
     {
@@ -30,6 +37,7 @@ public class TutorialPuzzle : MonoBehaviour
         Debug.Log(string.Join(", ", listUserChoice.ToArray()));
         if (string.Join(", ", listUserChoice.ToArray()).Equals(answer))
         {
+            Solve();
             tabletManager.greetingText.text = "Hello, " + tabletManager.getUsername();
             tabletManager.setStatusPuzzleInterface (false);
             tabletManager.setStatusSuccessInterface(true);

@@ -20,10 +20,12 @@ public class WireTask : MonoBehaviour
     public GameObject nextBtn;
     public GameObject wirePuzzleInterface;
     public GameObject interactRange;
-    public GameObject doorInteractRange;
+    // public GameObject doorInteractRange;
     public GameObject monitor;
     public GameObject toolBag;
     public GameController gameController;
+    public string puzzleID;
+    public RoomID roomID;
     private IEnumerator CheckCompletion()
     {
         while (!isComplete)
@@ -37,25 +39,25 @@ public class WireTask : MonoBehaviour
 
             if (successCount >= 4)
             {
-                Debug.Log("Done");
                 nextBtn.SetActive(true);
                 toolBag.SetActive(true);
                 interactRange.SetActive(false);
-                doorInteractRange.SetActive(true);
+                // doorInteractRange.SetActive(true);
                 setStatusWirePuzzleInterface(false);
                 gameController.SetState("FreeRoam");
                 monitor.GetComponent<DoorMonitorRoomOne>().enabled = false;
                 monitor.layer = LayerMask.NameToLayer("UI");
+                Solve();
             }
             else
             {
-                Debug.Log("Belum done");
             }
             yield return new WaitForSeconds(0.5f);
         }
     }
     void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         ArrayList shuffledTypes = new ArrayList(listDataType);
         ShuffleArrayList(shuffledTypes);
 
@@ -78,6 +80,14 @@ public class WireTask : MonoBehaviour
         }
         StartCoroutine(CheckCompletion());
     }
+    
+
+
+    public void Solve()
+    {
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
+
     private void ShuffleArrayList(ArrayList list)
     {
         for (int i = 0; i < list.Count; i++)
