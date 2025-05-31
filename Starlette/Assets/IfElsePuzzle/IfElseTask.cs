@@ -22,13 +22,19 @@ public class IfElseTask : MonoBehaviour
     public SuccessErrorManagerScreen successErrorManagerScreen;
     public GameController gameController;
 
-
+    public string puzzleID;
+    public RoomID roomID;
     void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         ResetTask();
         StartCoroutine(CheckCompletion());
     }
-
+     public void Solve()
+    {
+        
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
     private float GenerateRandomFloat()
     {
         return Mathf.Round(Random.Range(0.1f, 0.15f) * 100f) / 100f;
@@ -199,6 +205,7 @@ if (section == {blockButton[0].GetComponentInChildren<TextMeshProUGUI>().text}) 
                 {
                     this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
                     successErrorManagerScreen.SetStatusSuccesScreen(true);
+                    Solve();
                     isComplete = true;
                     Debug.Log(isComplete);
                 }
