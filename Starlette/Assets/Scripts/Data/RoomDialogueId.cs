@@ -1,8 +1,7 @@
 public enum RoomID
 {
     Room1,
-    Room2Part1,
-    Room2Part2,
+    Room2,
     Room3,
     Room4,
     Room5,

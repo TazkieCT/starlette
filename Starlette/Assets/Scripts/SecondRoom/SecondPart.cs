@@ -9,6 +9,7 @@ public class SecondPart : MonoBehaviour
     [SerializeField] private GameObject secondPart;
     [SerializeField] private GameObject firstPart;
     [SerializeField] private BlockFactory blockFactory;
+    [SerializeField] private DialogueSystem dialogueSystem;
     private CompilerContext context;
     public SuccessErrorManagerScreen successErrorManagerScreen;
     private bool isDone = false;
@@ -36,6 +37,7 @@ public class SecondPart : MonoBehaviour
     {
         isDone = true;
         RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+        dialogueSystem.StartDialogue(RoomID.Room2, DialogueID.Success);
     }
 
     public bool GetIsDone()
@@ -337,7 +339,8 @@ public class SecondPart : MonoBehaviour
             }
             else
             {
-                successErrorManagerScreen.SetStatusErrorScreen(true, "Do It Right.");    
+                successErrorManagerScreen.SetStatusErrorScreen(true, "Do It Right.");
+                dialogueSystem.StartDialogue(RoomID.Room2, DialogueID.Failed);
             }
                 
         }
