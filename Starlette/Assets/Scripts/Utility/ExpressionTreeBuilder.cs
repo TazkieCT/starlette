@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public static class ExpressionTreeBuilder
 {
@@ -20,6 +21,11 @@ public static class ExpressionTreeBuilder
             }
         }
 
+        if (stack.Count == 0)
+        {
+            Debug.WriteLine("cel");
+            return null;
+        }
         return stack.Pop(); 
     }
 

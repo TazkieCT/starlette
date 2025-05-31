@@ -10,9 +10,13 @@ public class SecondPart : MonoBehaviour
     [SerializeField] private GameObject firstPart;
     [SerializeField] private BlockFactory blockFactory;
     private CompilerContext context;
-
+    public SuccessErrorManagerScreen successErrorManagerScreen;
+    private bool isDone = false;
+    public string puzzleID;
+    public RoomID roomID;
     private void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         context = GetComponentInParent<CompilerContext>();
         if (context == null)
         {
@@ -27,6 +31,16 @@ public class SecondPart : MonoBehaviour
         }
         SetUpLeftPart();
         SetUpRightPart();
+    }
+    public void Solve()
+    {
+        isDone = true;
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
+
+    public bool GetIsDone()
+    {
+        return isDone;
     }
 
     private void SetUpRightPart()
@@ -135,11 +149,13 @@ public class SecondPart : MonoBehaviour
 
     public void ExecuteSequence(BaseBlockContainer holder)
     {
+        successErrorManagerScreen.SetCurrentScreen(this.gameObject.transform.parent.gameObject);
         // Implementation for executing the code block
         if (holder == null)
         {
             // bukain panel nanti
             Debug.LogError("Holder is null, cannot execute sequence.");
+            successErrorManagerScreen.SetStatusErrorScreen(true,"Holder is null, cannot execute sequence.");
             return;
         }
         List<GameObject> blocks = holder.GetAllBlocks();
@@ -148,6 +164,7 @@ public class SecondPart : MonoBehaviour
         if (variableBlock == null)
         {
             Debug.LogError("First block is not a VariableBlock.");
+            
             return;
         }
 
@@ -157,6 +174,7 @@ public class SecondPart : MonoBehaviour
         {
             // open panel
             Debug.LogError($"{variableCheck.Message}");
+            successErrorManagerScreen.SetStatusErrorScreen(true,$"{variableCheck.Message}");
             return;
         }
 
@@ -184,8 +202,10 @@ public class SecondPart : MonoBehaviour
         List<CodeBlock> postFix = ExpressionTreeBuilder.ToPostfix(codeBlocks);
         CodeBlock root = ExpressionTreeBuilder.BuildExpressionTree(postFix);
         // Debug.Log($"Root of expression tree: {root.Evaluate(context)}");
+        Debug.Log(root);
         if (root == null)
         {
+            successErrorManagerScreen.SetStatusErrorScreen(true, "Fill the Block!!");
             Debug.LogError("Failed to build expression tree from blocks.");
             return;
         }
@@ -271,6 +291,7 @@ public class SecondPart : MonoBehaviour
 
     public void ExecuteSequence(FreeBlockContainer container)
     {
+        successErrorManagerScreen.SetCurrentScreen(secondPart.transform.parent.gameObject.transform.parent.gameObject);
         List<GameObject> blocks = container.GetAllBlocks();
         if (blocks.Count == 0)
         {
@@ -308,10 +329,21 @@ public class SecondPart : MonoBehaviour
         object result = root.Evaluate(context);
         if(result is bool boolResult)
         {
-            if (boolResult) Debug.Log("HORE BENAR GOBLOK");
+            if (boolResult)
+            {
+                Debug.Log("HORE BENAR GOBLOK");
+                successErrorManagerScreen.SetStatusSuccesScreen(true);
+                Solve();
+            }
+            else
+            {
+                successErrorManagerScreen.SetStatusErrorScreen(true, "Do It Right.");    
+            }
+                
         }
         else
         {
+            successErrorManagerScreen.SetStatusErrorScreen(true, "ExecuteSequence: Result is not a valid CodeBlock.");
             Debug.LogError("ExecuteSequence: Result is not a valid CodeBlock.");
         }
 

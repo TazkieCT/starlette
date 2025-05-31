@@ -28,6 +28,10 @@ public class SuccessErrorManagerScreen : MonoBehaviour
         {
             gameController.SetState("Freeroam");
         }
+        else
+        {
+            currentScreen.SetActive(!stat);
+        }
     }
 
 
