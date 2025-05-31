@@ -37,8 +37,8 @@ public class AssignmentOperatorBlock : OperatorBlock
             PayloadResultModel result = MatchDataType(variableBlock, value);
             if (!result.Success)
             {
-                Debug.LogError(result.Message);
-                throw new Exception(result.Message);
+                
+                return new PayloadResultModel(result.Message, false);
             }
 
             // Buat block baru dlu untuk copy hasil variablenya, nanti yang di store ke context itu adalah blck barunya
@@ -55,12 +55,14 @@ public class AssignmentOperatorBlock : OperatorBlock
             PayloadResultModel declareResult = context.DeclareVariable(variableName);
             if (!declareResult.Success)
             {
-                throw new Exception($"{declareResult.Message}");
+                Debug.LogError($"{declareResult.Message}");
+                return new PayloadResultModel(declareResult.Message, false, newVariableBlock.GetComponent<VariableBlock>());
             }
             declareResult = context.AssignVariable(variableName, newVariableBlock.GetComponent<VariableBlock>());
             if (!declareResult.Success)
             {
-                throw new Exception($"{declareResult.Message}");
+                Debug.LogError($"{declareResult.Message}");
+                return new PayloadResultModel(declareResult.Message, false, newVariableBlock.GetComponent<VariableBlock>());
             }
             Debug.Log($"Assignment successful: {variableName}, newVariableValue: {newValue.GetValue().GetValue()}");
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TutorialPuzzle : MonoBehaviour
 {
     public GameObject[] listChoiceButton;
-
+    [SerializeField] private DialogueSystem dialogueSystem;
     public Sprite defaultChoiceSprite;
    
     ArrayList listUserChoice;
@@ -24,6 +24,7 @@ public class TutorialPuzzle : MonoBehaviour
     public void Solve()
     {
         RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+        dialogueSystem.StartDialogue(RoomID.Room1, DialogueID.Success);
     }
 
     public void addChoice(TextMeshProUGUI choice)

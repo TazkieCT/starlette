@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -8,6 +9,16 @@ public class PanelInteractBehavior : MonoBehaviour, Interactable
     [SerializeField] public GameObject backgroundPanel;
     public void Interact()
     {
+        if (panelInterface.name == "SecondRoomFirstPartPuzzle" && panelInterface.GetComponent<FirstPart>().GetIsDone())
+        {
+            panelInterface.GetComponent<FirstPart>().successErrorManagerScreen.SetStatusSuccesScreen(true);
+            return;
+        }
+        else if (panelInterface.name == "SecondRoomSecondPartPuzzle" && panelInterface.GetComponent<SecondPart>().GetIsDone())
+        {
+            panelInterface.GetComponent<SecondPart>().successErrorManagerScreen.SetStatusSuccesScreen(true);
+            return;
+        }
         if (panelInterface == null)
         {
             Debug.LogError("Panel Interface is not assigned.");
