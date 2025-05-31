@@ -42,7 +42,7 @@ public class RoomProgressManager : MonoBehaviour
     {
         var data = GetRoomData(room);
         data.timeSpent += Time.time - data.startTime;
-        data.startTime = 0f;
+        // data.startTime = 0f;
     }
 
     public void RegisterPuzzle(RoomID room, string puzzleID)
@@ -88,5 +88,16 @@ public class RoomProgressManager : MonoBehaviour
         }
         return total / allRooms.Count;
     }
+
+    public float GetTotalTime()
+    {
+        float total = 0f;
+        foreach (var room in allRooms)
+        {
+            total += room.timeSpent;
+        }
+        return total;
+    }
+
 }
 
