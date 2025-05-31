@@ -57,7 +57,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Debug.Log("Press e");
             Interact();
         }
     }
@@ -68,14 +67,12 @@ public class PlayerMovement : MonoBehaviour
         Debug.DrawLine(transform.position, interactPosition, Color.red, 1f);
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, lastDirection, interactRange, LayerMask.GetMask("Interactable"));
-        Debug.Log(hit.collider);
         if (hit.collider != null)
         {
             hit.collider.GetComponent<Interactable>().Interact();
         }
         else
         {
-            //Debug.Log("Item interact");
             Item item = inventoryManager.getSelectedItem();
 
             item.Use();
