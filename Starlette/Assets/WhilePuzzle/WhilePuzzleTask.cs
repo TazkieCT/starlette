@@ -36,15 +36,22 @@ public class WhilePuzzleTask : MonoBehaviour
         public string XOp;
         public int XRm;
     }
+    public string puzzleID;
+    public RoomID roomID;
+
     void Start()
     {
+        RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
         GenerateAnswer();
         GenerateBlock();
         
         Debug.Log(packet);
     }
 
-
+    public void Solve()
+    {
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, puzzleID);
+    }
 
     public async void RunCode()
     {
@@ -76,6 +83,7 @@ public class WhilePuzzleTask : MonoBehaviour
         {
             sendingPacketScreen.SetActive(false);
             successErrorManagerScreen.SetStatusSuccesScreen(true);
+            Solve();
             isDone = true;
         }
     }
