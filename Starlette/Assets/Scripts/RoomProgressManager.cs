@@ -6,9 +6,13 @@ public class RoomProgressManager : MonoBehaviour
 {
     public static RoomProgressManager Instance;
     public List<RoomProgressData> allRooms = new();
-
+    float totalTimeOfGame;
+    float sessionStartTime;
+    bool isTrackingTime = true;
     private void Awake()
     {
+
+        totalTimeOfGame = 0f;
         if (Instance == null)
         {
             Instance = this;
@@ -29,7 +33,42 @@ public class RoomProgressManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+
         }
+           sessionStartTime = Time.time;
+        totalTimeOfGame = PlayerPrefs.GetFloat("TotalPlayTime", 0f);
+    }
+    void Update()
+    {
+         if (isTrackingTime)
+        {
+            totalTimeOfGame += Time.deltaTime;
+        }
+    }
+
+    public void OnPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            SavePlayTime();
+        }
+        else
+        {
+            sessionStartTime = Time.time;
+        }
+    }
+
+    public void OnQuit()
+    {
+        isTrackingTime = false;
+        SavePlayTime();
+    }
+
+    private void SavePlayTime()
+    {
+        PlayerPrefs.SetFloat("TotalPlayTime", totalTimeOfGame);
+        PlayerPrefs.Save();
+        Debug.Log(totalTimeOfGame);
     }
 
     public void StartRoom(RoomID room)
