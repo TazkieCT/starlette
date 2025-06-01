@@ -12,10 +12,10 @@ public class InteractDetection : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-       Debug.Log(other);
+       //Debug.Log(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Player entered interaction zone.");
+            //Debug.Log("Player entered interaction zone.");
             interactIcon.SetActive(true);
         }
     }
@@ -25,7 +25,7 @@ public class InteractDetection : MonoBehaviour
         // Check if the exiting object is on the Player layer
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Player left interaction zone.");
+            //Debug.Log("Player left interaction zone.");
             interactIcon.SetActive(false);
         }
     }

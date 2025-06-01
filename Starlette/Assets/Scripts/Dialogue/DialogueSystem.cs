@@ -126,7 +126,7 @@ public class DialogueSystem : MonoBehaviour
         dialogueCanvas.enabled = false;
         if (playerMovement != null)
         {
-            Debug.Log("tes");
+            //Debug.Log("tes");
             playerMovement.canMove = true;
             GameObject gameInterface = GameObject.Find("Inventory").transform.GetChild(1).gameObject;
             gameInterface.SetActive(true);

@@ -12,12 +12,12 @@ public class GameController : MonoBehaviour
         
         DialogManager.Instance.OnShowDialog += () => {
             state = GameState.Interacting;
-            Debug.Log("Interacting");
+            //Debug.Log("Interacting");
         };
         DialogManager.Instance.OnHideDialog += () => {
             if (state == GameState.Interacting){
                 state = GameState.FreeRoam;
-                Debug.Log("FreeRoam");
+                //Debug.Log("FreeRoam");
             }
         };
     }
@@ -26,9 +26,9 @@ public class GameController : MonoBehaviour
         if (System.Enum.TryParse(newState, true, out GameState parsedState))
         {
             state = parsedState;
-            Debug.Log($"State changed to: {state}");
+            //Debug.Log($"State changed to: {state}");
         }
-        Debug.Log("State changed to: " + newState);
+        //Debug.Log("State changed to: " + newState);
     }
     private void Update()
     {
