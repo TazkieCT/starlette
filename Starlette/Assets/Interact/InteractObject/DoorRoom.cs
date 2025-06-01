@@ -20,15 +20,16 @@ public class DoorRoom : MonoBehaviour, Interactable
         if (roomData.progress >= 100f)
         {
             character.transform.position = spawnPoint.transform.position;
-            if (roomData.timeSpent == 0)
-            {
-                RoomProgressManager.Instance.EndRoom(roomData.roomID);
-            }
+            //if (roomData.timeSpent == 0)
+            //{
+            //    RoomProgressManager.Instance.EndRoom(roomData.roomID);
+            //}
             //Debug.Log("Move to next room.");
             if(currentRoom == RoomID.Room7)
             {
                 GameObject parent = GameObject.Find("Cutscene");
                 parent.transform.GetChild(0).gameObject.SetActive(true);
+                RoomProgressManager.Instance.OnGameFinished();
             }
         }
         else

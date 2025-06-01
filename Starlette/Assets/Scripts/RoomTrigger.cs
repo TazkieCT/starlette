@@ -18,7 +18,7 @@ public class RoomTrigger : MonoBehaviour
                 RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);
             }
 
-            RoomProgressManager.Instance.StartRoom(roomID);
+            //RoomProgressManager.Instance.StartRoom(roomID);
             hasRegistered = true;
         }
     }
