@@ -17,7 +17,6 @@ public class WireTask : MonoBehaviour
     private string[] leftWireDataTypes = new string[4];
     private object[] rightWireValues = new object[4];
     public bool isComplete = false;
-    public GameObject nextBtn;
     public GameObject wirePuzzleInterface;
     public GameObject interactRange;
     // public GameObject doorInteractRange;
@@ -39,7 +38,6 @@ public class WireTask : MonoBehaviour
 
             if (successCount >= 4)
             {
-                nextBtn.SetActive(true);
                 toolBag.SetActive(true);
                 interactRange.SetActive(false);
                 // doorInteractRange.SetActive(true);

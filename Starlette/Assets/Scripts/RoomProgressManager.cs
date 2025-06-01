@@ -1,11 +1,15 @@
+using Firebase.Extensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class RoomProgressManager : MonoBehaviour
 {
     public static RoomProgressManager Instance;
     public List<RoomProgressData> allRooms = new();
+    private float gameplayStartTime = 0f;
+    private float totalGameplayTime = 0f;
+    private bool gameplayRunning = false;
 
     private void Awake()
     {
@@ -32,18 +36,57 @@ public class RoomProgressManager : MonoBehaviour
         }
     }
 
-    public void StartRoom(RoomID room)
+    private void Start()
     {
-        var data = GetRoomData(room);
-        data.startTime = Time.time;
+        StartGameplayTimer();
     }
 
-    public void EndRoom(RoomID room)
+    //void Update()
+    //{
+    //    if (gameplayRunning)
+    //    {
+    //        Debug.Log($"Gameplay Time: {GetTotalGameplayTime():F2} seconds");
+    //    }
+    //}
+
+    public void StartGameplayTimer()
     {
-        var data = GetRoomData(room);
-        data.timeSpent += Time.time - data.startTime;
-        // data.startTime = 0f;
+        if (!gameplayRunning)
+        {
+            gameplayStartTime = Time.time;
+            gameplayRunning = true;
+        }
     }
+
+    public void StopGameplayTimer()
+    {
+        if (gameplayRunning)
+        {
+            totalGameplayTime += Time.time - gameplayStartTime;
+            gameplayRunning = false;
+        }
+    }
+
+    public float GetTotalGameplayTime()
+    {
+        if (gameplayRunning)
+            return totalGameplayTime + (Time.time - gameplayStartTime);
+        else
+            return totalGameplayTime;
+    }
+
+    //public void StartRoom(RoomID room)
+    //{
+    //    var data = GetRoomData(room);
+    //    data.startTime = Time.time;
+    //}
+
+    //public void EndRoom(RoomID room)
+    //{
+    //    var data = GetRoomData(room);
+    //    data.timeSpent += Time.time - data.startTime;
+        // data.startTime = 0f;
+    //}
 
     public void RegisterPuzzle(RoomID room, string puzzleID)
     {
@@ -70,7 +113,7 @@ public class RoomProgressManager : MonoBehaviour
     {
         var data = GetRoomData(room);
         int puzzlesLeft = data.unfinishedPuzzles.Count;
-        int total = Mathf.Max(data.totalPuzzles, 1); // hindari bagi nol
+        int total = Mathf.Max(data.totalPuzzles, 1);
         data.progress = 100f * (total - puzzlesLeft) / total;
     }
 
@@ -97,6 +140,79 @@ public class RoomProgressManager : MonoBehaviour
             total += room.timeSpent;
         }
         return total;
+    }
+
+    public void PushAttemptToFirebase()
+    {
+        if (!PlayerPrefs.HasKey("Username"))
+        {
+            Debug.LogWarning("Username key not found. Skipping attempt push.");
+            return;
+        }
+        
+        string username = PlayerPrefs.GetString("Username");
+
+        if (string.IsNullOrEmpty(username))
+        {
+            Debug.LogWarning("No valid username found. Skipping attempt push.");
+            return;
+        }
+            
+        var attemptsRef = FirebaseManager.Instance.DBReference
+            .Child("gameProgress")
+            .Child(username)
+            .Child("attempts");
+
+        // Ambil jumlah attempt yang sudah ada
+        attemptsRef.GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                Debug.LogError("Failed to get attempts: " + task.Exception);
+                return;
+            }
+
+            int nextAttemptNumber = 1;
+
+            if (task.Result.Exists)
+            {
+                // next attemptnya
+                nextAttemptNumber = (int)task.Result.ChildrenCount + 1;
+            }
+
+            var newAttempt = new RoomUploadPayload
+            {
+                time = GetTotalGameplayTime(),
+                timestamp = DateTime.UtcNow.ToString("o")
+            };
+
+            attemptsRef.Child(nextAttemptNumber.ToString())
+                .SetRawJsonValueAsync(JsonUtility.ToJson(newAttempt))
+                .ContinueWithOnMainThread(pushTask =>
+                {
+                    if (pushTask.IsCompleted)
+                        Debug.Log($"Attempt {nextAttemptNumber} pushed for user {username}");
+                    else
+                        Debug.LogError("Failed to push attempt: " + pushTask.Exception);
+                });
+        });
+    }
+
+    public void OnGameFinished()
+    {
+        StopGameplayTimer();
+
+        PushAttemptToFirebase();
+
+        Debug.Log($"Game finished! Total gameplay time: {GetTotalGameplayTime()} seconds");
+    }
+
+
+    [System.Serializable]
+    public class RoomUploadPayload
+    {
+        public float time;
+        public string timestamp;
     }
 
 }

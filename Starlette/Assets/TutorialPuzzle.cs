@@ -29,13 +29,13 @@ public class TutorialPuzzle : MonoBehaviour
 
     public void addChoice(TextMeshProUGUI choice)
     {
-        Debug.Log(choice.text);
+        //Debug.Log(choice.text);
         listUserChoice.Add(choice.text);
     }
 
     public void checkResult()
     {
-        Debug.Log(string.Join(", ", listUserChoice.ToArray()));
+        //Debug.Log(string.Join(", ", listUserChoice.ToArray()));
         if (string.Join(", ", listUserChoice.ToArray()).Equals(answer))
         {
             Solve();

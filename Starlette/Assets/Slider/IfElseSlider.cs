@@ -19,7 +19,7 @@ public class IfElseSlider : MonoBehaviour
     {
         image.fillAmount = 0f;
         float.TryParse(speedText.text, out speed);
-        Debug.Log(speed);
+        //Debug.Log(speed);
     }
     public void StartFill()
     {
@@ -45,6 +45,6 @@ public class IfElseSlider : MonoBehaviour
     public void SetSpeed(float sp)
     {
         this.speed = sp;
-        Debug.Log(speed);
+        //Debug.Log(speed);
     }
 }

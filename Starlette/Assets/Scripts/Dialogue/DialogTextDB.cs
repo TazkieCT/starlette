@@ -193,11 +193,7 @@ public class DialogTextDB : ScriptableObject
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "All the pieces from before... they�re here. Everything connects.",
-                        }
-                    },
-                    {
-                        DialogueID.Success, new List<string> {
+                        "All the pieces from before... they're here.",
                         "I remember this moment... we were happy. They were real.",
                         }
                     },
@@ -217,6 +213,13 @@ public class DialogTextDB : ScriptableObject
             {
                 RoomID.Room7, new Dictionary<DialogueID, List<string>>
                 {
+                    {
+                        DialogueID.Dialogue1, new List<string> {
+                         "Let's hope this capsule still knows how to get to Earth.",
+                         "I wish I had more time...",
+                         "Alright… take me home."
+                        }
+                    },
                     {
                         DialogueID.Incomplete1, new List<string> {
                         "It seems need a power, i need to find something.",

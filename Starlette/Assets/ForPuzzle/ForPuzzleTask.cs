@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ForPuzzleTask : MonoBehaviour
 {
+    int packet;
     private Answer answer;
     private Answer userChoice;
     public GameObject valueBlock;
@@ -62,11 +63,20 @@ public class ForPuzzleTask : MonoBehaviour
         }
         else
         {
-            Solve();
-            sendingPacketScreen.SetActive(false);
-            forPuzzleScreen.SetActive(false);
-            successErrorManagerScreen.SetStatusSuccesScreen(true);
-            isDone = true;
+            if (result == packet)
+            {
+                Solve();
+                sendingPacketScreen.SetActive(false);
+                forPuzzleScreen.SetActive(false);
+                successErrorManagerScreen.SetStatusSuccesScreen(true);
+                isDone = true;
+
+            }
+            else
+            {
+                sendingPacketScreen.SetActive(false);
+                successErrorManagerScreen.SetStatusErrorScreen(true, "Your Code Makes The System Sending Wrong Amount of Packets");
+            }
         }
     }
 
@@ -142,7 +152,7 @@ void UpdatePacketDisplay(int value)
     void GenerateAnswer()
     {
         RandomAllValueAnswer();
-        int packet = 100;
+        packet = 100;
         if (GenerateRandomInteger(1, 3) == 1)
         {
             // >
@@ -199,7 +209,7 @@ void UpdatePacketDisplay(int value)
         forChoiceBlockMenu.SpawnNewObject(valueBlock, answer.iIncDec.ToString());
         forChoiceBlockMenu.SpawnNewObject(valueBlock, answer.packetIncDec.ToString());
         forChoiceBlockMenu.SpawnNewObject(operatorBlock, answer.iOp);
-        Debug.Log(answer.packetOp);
+        //Debug.Log(answer.packetOp);
         forChoiceBlockMenu.SpawnNewObject(operatorBlock, answer.packetOp);
 
 
