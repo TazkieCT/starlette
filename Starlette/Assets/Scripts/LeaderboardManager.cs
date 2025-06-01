@@ -26,7 +26,7 @@ public class LeaderboardManager : MonoBehaviour
 
     void OnUserAdded(object sender, ChildChangedEventArgs args)
     {
-        if(args.Snapshot.Exists)
+        if (args.Snapshot.Exists)
         {
             AddUser(args.Snapshot);
         }
@@ -34,7 +34,7 @@ public class LeaderboardManager : MonoBehaviour
 
     void OnUserChanged(object sender, ChildChangedEventArgs args)
     {
-        if(args.Snapshot.Exists)
+        if (args.Snapshot.Exists)
         {
             UpdateUser(args.Snapshot);
         }
@@ -43,10 +43,10 @@ public class LeaderboardManager : MonoBehaviour
     void AddUser(DataSnapshot snapshot)
     {
         string username = snapshot.Key;
-        int room = snapshot.HasChild("room")? int.Parse(snapshot.Child("room").Value.ToString()) : 0;
-        int time = snapshot.HasChild("time")? int.Parse(snapshot.Child("time").Value.ToString()) : 0;
+        int room = snapshot.HasChild("room") ? int.Parse(snapshot.Child("room").Value.ToString()) : 0;
+        int time = snapshot.HasChild("time") ? int.Parse(snapshot.Child("time").Value.ToString()) : 0;
 
-        if(!leaderboardEntries.ContainsKey(username))
+        if (!leaderboardEntries.ContainsKey(username))
         {
             leaderboardEntries[username] = new LeaderboardData(username, room, time);
             UpdateLeaderboardUI();
@@ -56,8 +56,8 @@ public class LeaderboardManager : MonoBehaviour
     void UpdateUser(DataSnapshot snapshot)
     {
         string username = snapshot.Key;
-        int room = snapshot.HasChild("room")? int.Parse(snapshot.Child("room").Value.ToString()) : 0;
-        int time = snapshot.HasChild("time")? int.Parse(snapshot.Child("time").Value.ToString()) : 0;
+        int room = snapshot.HasChild("room") ? int.Parse(snapshot.Child("room").Value.ToString()) : 0;
+        int time = snapshot.HasChild("time") ? int.Parse(snapshot.Child("time").Value.ToString()) : 0;
 
         leaderboardEntries[username] = new LeaderboardData(username, room, time);
         UpdateLeaderboardUI();
@@ -65,7 +65,7 @@ public class LeaderboardManager : MonoBehaviour
 
     void UpdateLeaderboardUI()
     {
-        foreach(Transform child in leaderboardContent.transform)
+        foreach (Transform child in leaderboardContent.transform)
         {
             Destroy(child.gameObject);
         }
@@ -74,24 +74,24 @@ public class LeaderboardManager : MonoBehaviour
         sortedList.Sort((a, b) =>
         {
             int roomComparison = b.room.CompareTo(a.room); // Descending room
-            if(roomComparison != 0)
+            if (roomComparison != 0)
                 return roomComparison;
             return a.time.CompareTo(b.time); // Ascending time
         });
 
         int rank = 1;
 
-        foreach(LeaderboardData data in sortedList)
+        foreach (LeaderboardData data in sortedList)
         {
             GameObject entry = Instantiate(userDataPrefab, leaderboardContent.transform);
             entry.transform.localScale = Vector3.one;
 
-            if(rank % 2 == 0)
+            if (rank % 2 == 0)
             {
                 Image background = entry.GetComponent<Image>();
                 background.color = new Color32(24, 7, 38, 255);
             }
-            
+
             DataUI dataUI = entry.GetComponent<DataUI>();
 
             dataUI.rankText.text = rank.ToString();
@@ -101,6 +101,11 @@ public class LeaderboardManager : MonoBehaviour
 
             rank++;
         }
+    }
+
+    public void NavigateToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("mainMenu");
     }
 }
 

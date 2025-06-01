@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
-using UnityEngine.U2D.IK;
 using UnityEngine.UI;
 
 public class FirstPart : MonoBehaviour
