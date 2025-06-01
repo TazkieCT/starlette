@@ -8,13 +8,7 @@ public class Tablet : Item
 
         gameController.SetState("OnTablet");
 
-        TabletManager tabletManager = gameController.GetComponent<TabletManager>();
-        
-        
-
-        tabletManager.setStatusTabletInterface(true);
-        tabletManager.setStatusMaterialOneInterface(true);
-        Debug.Log("Tablet activated");
-        Debug.Log("this is tablet");
+        GameObject moka = GameObject.Find("Moka");
+        moka.transform.GetChild(0).gameObject.SetActive(true);
     }
 }

@@ -81,10 +81,19 @@ public class WhilePuzzleTask : MonoBehaviour
         }
         else
         {
-            sendingPacketScreen.SetActive(false);
-            successErrorManagerScreen.SetStatusSuccesScreen(true);
-            Solve();
-            isDone = true;
+            if (result == packet)
+            {
+                sendingPacketScreen.SetActive(false);
+                successErrorManagerScreen.SetStatusSuccesScreen(true);
+                Solve();
+                isDone = true;
+
+            }
+            else
+            {
+                sendingPacketScreen.SetActive(false);
+                successErrorManagerScreen.SetStatusErrorScreen(true, "Your Code Makes The System Sending Wrong Amount of Packets");
+            }
         }
     }
     bool ValidateBlockCount()
