@@ -75,11 +75,10 @@ public class RoomProgressManager : MonoBehaviour
         int total = Mathf.Max(data.totalPuzzles, 1);
         data.progress = 100f * (total - puzzlesLeft) / total;
 
-        // When progress reaches 100% and not uploaded yet
         if (data.progress >= 100f && !uploadedRooms.Contains(room))
         {
-            uploadedRooms.Add(room);   // Mark as uploaded
-            PushRoomDataToFirebase(data);  // Call your Firebase upload here
+            uploadedRooms.Add(room);
+            PushRoomDataToFirebase(data);
         }
     }
 
