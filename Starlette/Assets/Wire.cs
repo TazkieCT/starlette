@@ -6,20 +6,29 @@ public class Wire : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
 {
     private string dataType;
     private Image _image;
-    private LineRenderer _lineRenderer;
     private Canvas _canvas;
     private bool _isDraggedStart = false;
     public bool isLeftWire;
     public bool isSuccess = false;
     private WireTask _wireTask;
+    
+    [SerializeField] private RectTransform wireRectTransform;
+    [SerializeField] private Image wireImage;
+    private Vector2 initialWireSize;
+
     public void OnDrag(PointerEventData eventData) { }
+    
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!isLeftWire) { return; }
         if (isSuccess) { return; }
         _isDraggedStart = true;
         _wireTask.currentDraggedWire = this;
+        
+        wireImage.enabled = true;
+        initialWireSize = wireRectTransform.sizeDelta;
     }
+    
     public void OnEndDrag(PointerEventData eventData)
     {
         if (_wireTask.currentHoveredWire != null)
@@ -35,14 +44,34 @@ public class Wire : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         }
         _isDraggedStart = false;
         _wireTask.currentDraggedWire = null;
+        
+        if (!isSuccess)
+        {
+            wireImage.enabled = false;
+        }
     }
 
     private void Awake()
     {
         _image = GetComponent<Image>();
-        _lineRenderer = GetComponent<LineRenderer>();
         _canvas = GetComponentInParent<Canvas>();
         _wireTask = GetComponentInParent<WireTask>();
+        
+        if (wireRectTransform == null)
+        {
+            wireRectTransform = new GameObject("Wire").AddComponent<RectTransform>();
+            wireRectTransform.SetParent(transform);
+            wireRectTransform.localPosition = Vector3.zero;
+            wireRectTransform.localScale = Vector3.one;
+            wireImage = wireRectTransform.gameObject.AddComponent<Image>();
+            wireImage.sprite = _image.sprite;
+        
+            wireImage.color = _image.color;
+        
+            wireImage.type = _image.type;
+            wireImage.enabled = false;
+        }
+        
         Debug.Log(_wireTask);
     }
 
@@ -57,18 +86,26 @@ public class Wire : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 _canvas.worldCamera,
                 out movePos
             );
-            Vector3 offset = new Vector3(0.5f, 0f, 0f);
-            _lineRenderer.SetPosition(0, transform.position + offset);
-            _lineRenderer.SetPosition(1, _canvas.transform.TransformPoint(movePos) + offset);
-
+            
+            Vector2 localMousePos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                transform as RectTransform,
+                Input.mousePosition,
+                _canvas.worldCamera,
+                out localMousePos
+            );
+            
+            Vector2 direction = localMousePos;
+            float distance = direction.magnitude;
+            
+            wireRectTransform.sizeDelta = new Vector2(distance, 5f);
+            wireRectTransform.pivot = new Vector2(0, 0.5f);
+            wireRectTransform.localPosition = new Vector3(20f,0,0);
+            wireRectTransform.localRotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
         }
-        else
+        else if (!isSuccess)
         {
-            if (!isSuccess)
-            {
-                _lineRenderer.SetPosition(0, Vector3.zero);
-                _lineRenderer.SetPosition(1, Vector3.zero);
-            }
+            wireImage.enabled = false;
         }
 
         bool isHovered = RectTransformUtility.RectangleContainsScreenPoint(transform as RectTransform, Input.mousePosition, _canvas.worldCamera);
@@ -76,13 +113,10 @@ public class Wire : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         {
             _wireTask.currentHoveredWire = this;
         }
-
     }
 
     public void setDataType(string dataType)
     {
         this.dataType = dataType;
     }
-
-   
 }

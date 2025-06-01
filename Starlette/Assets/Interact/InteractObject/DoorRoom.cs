@@ -20,8 +20,11 @@ public class DoorRoom : MonoBehaviour, Interactable
         if (roomData.progress >= 100f)
         {
             character.transform.position = spawnPoint.transform.position;
-            RoomProgressManager.Instance.EndRoom(roomData.roomID);
-            //Debug.Log("Move to next room.");
+            if (roomData.timeSpent == 0)
+            {
+                RoomProgressManager.Instance.EndRoom(roomData.roomID);
+            }
+            Debug.Log("Move to next room.");
         }
         else
         {

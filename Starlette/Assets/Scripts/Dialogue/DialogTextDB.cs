@@ -193,11 +193,7 @@ public class DialogTextDB : ScriptableObject
                     },
                     {
                         DialogueID.Dialogue2, new List<string> {
-                        "All the pieces from before... they�re here. Everything connects.",
-                        }
-                    },
-                    {
-                        DialogueID.Success, new List<string> {
+                        "All the pieces from before... they're here.",
                         "I remember this moment... we were happy. They were real.",
                         }
                     },
