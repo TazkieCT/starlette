@@ -144,8 +144,20 @@ public class RoomProgressManager : MonoBehaviour
 
     public void PushAttemptToFirebase()
     {
-        string username = PlayerPrefs.GetString("Username", "DummyUser123");
+        if (!PlayerPrefs.HasKey("Username"))
+        {
+            Debug.LogWarning("Username key not found. Skipping attempt push.");
+            return;
+        }
+        
+        string username = PlayerPrefs.GetString("Username");
 
+        if (string.IsNullOrEmpty(username))
+        {
+            Debug.LogWarning("No valid username found. Skipping attempt push.");
+            return;
+        }
+            
         var attemptsRef = FirebaseManager.Instance.DBReference
             .Child("gameProgress")
             .Child(username)
