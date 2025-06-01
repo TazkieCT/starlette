@@ -12,7 +12,7 @@ public class TriggerDialogue : MonoBehaviour
         Debug.Log(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Trigger Interact.");
+            //Debug.Log("Trigger Interact.");
             dialogueSystem.StartDialogue(selectedRoom, selectedDialogue);
             Destroy(gameObject);
         }

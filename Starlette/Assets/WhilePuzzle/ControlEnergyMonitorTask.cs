@@ -13,44 +13,46 @@ public class ControlEnergyMonitorTask : MonoBehaviour
     public GameObject doorCapsuleRoom;
     public GameObject doorRoom6;
 
+    public bool isCharged = false;
+
     [SerializeField] ForPuzzleTask forPuzzleTask;
     [SerializeField] WhilePuzzleTask whilePuzzleTask;
     void Start()
     {
-        
+        RoomProgressManager.Instance.RegisterPuzzle(RoomID.Room7, "Decision1");
+        RoomProgressManager.Instance.RegisterPuzzle(RoomID.Room6, "Decision2");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (chargedDoor == "DoorToCapsule")
+        if (chargedDoor == "DoorToCapsule" && !isCharged)
         {
             doorCapsuleRoomUI.transform.Find("DoorStat").gameObject.GetComponent<Image>().sprite = selectedStatus;
             door6UI.transform.Find("DoorStat").gameObject.GetComponent<Image>().sprite = unSelectedStatus;
 
             if (forPuzzleTask.GetIsDone() && whilePuzzleTask.GetIsDone())
             {
-                ControlDoorsActiveGameObject("Interactable", "UI", true, false);
+                ControlDoorsActiveGameObject(RoomID.Room7, "Decision1");
             }
         }
-        else if (chargedDoor == "Door6")
+        else if (chargedDoor == "Door6" && !isCharged)
         {
             doorCapsuleRoomUI.transform.Find("DoorStat").gameObject.GetComponent<Image>().sprite = unSelectedStatus;
             door6UI.transform.Find("DoorStat").gameObject.GetComponent<Image>().sprite = selectedStatus;
 
             if (forPuzzleTask.GetIsDone() && whilePuzzleTask.GetIsDone())
             {
-                ControlDoorsActiveGameObject("UI", "Interactable", false, true);
+                ControlDoorsActiveGameObject(RoomID.Room6, "Decision2");
             }
         }
     }
 
-    void ControlDoorsActiveGameObject(string doorCapsuleRoomLayer, string doorRoom6Layer, bool doorCapsuleRoomBoolean, bool doorRoom6Boolean)
+    void ControlDoorsActiveGameObject(RoomID roomID, string decision)
     {
-        doorCapsuleRoom.layer = LayerMask.NameToLayer(doorCapsuleRoomLayer);
-        doorCapsuleRoom.transform.Find("InteractRange").gameObject.SetActive(doorCapsuleRoomBoolean);
-        doorRoom6.layer = LayerMask.NameToLayer(doorRoom6Layer);
-        doorRoom6.transform.Find("InteractRange").gameObject.SetActive(doorRoom6Boolean);
+        RoomProgressManager.Instance.MarkPuzzleFinished(roomID, decision);
+        RoomProgressManager.Instance.MarkPuzzleFinished(RoomID.Room5, "Puzzle3");
+        isCharged = true;
     }
     
     public void ChargedDoor()

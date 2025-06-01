@@ -5,6 +5,13 @@ public class DoorRoom : MonoBehaviour, Interactable
     public GameObject spawnPoint;
     public GameObject character;
     public RoomID currentRoom;
+    public DialogueID errorDialogueMessage;
+    [SerializeField] private DialogueSystem dialogueSystem;
+
+    private void Awake()
+    {
+        dialogueSystem = GameObject.Find("DialogueObject").GetComponent<DialogueSystem>();
+    }
 
     public void Interact()
     {
@@ -14,12 +21,14 @@ public class DoorRoom : MonoBehaviour, Interactable
         {
             character.transform.position = spawnPoint.transform.position;
             RoomProgressManager.Instance.EndRoom(roomData.roomID);
-            Debug.Log("Move to next room.");
+            //Debug.Log("Move to next room.");
         }
         else
         {
+
             Debug.Log($"Cant move to next room. Progress {roomData.progress}%");
             //Nanti disini kita panggil dialogue
+            dialogueSystem.StartDialogue(currentRoom, errorDialogueMessage);
         }
     }
 }

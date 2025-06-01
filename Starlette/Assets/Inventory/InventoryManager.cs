@@ -32,7 +32,7 @@ public class InventoryManager : MonoBehaviour
     public void AddItem(Item item){
         InventorySlot check= CheckInventory();
        if(check == null){
-            Debug.Log("Inventory full");
+            //Debug.Log("Inventory full");
        }else{
             SpawnNewItem(item, check);
        }
