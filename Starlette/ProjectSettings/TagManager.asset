@@ -2,8 +2,9 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - PuzzleCanvas
   layers:
   - Default
   - TransparentFX
@@ -14,9 +15,9 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - Interactable
+  - Player
+  - Blocks
   - 
   - 
   - 
@@ -41,6 +42,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 3588371917
+    locked: 0
+  - name: Foreground
+    uniqueID: 3655001495
+    locked: 0
+  - name: SolidObject
+    uniqueID: 2046236233
+    locked: 0
+  - name: Decoration
+    uniqueID: 4055792605
+    locked: 0
+  - name: Interactable
+    uniqueID: 3099594285
+    locked: 0
+  - name: Player
+    uniqueID: 3309191097
+    locked: 0
+  - name: UI
+    uniqueID: 3519255161
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
@@ -50,27 +72,3 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
