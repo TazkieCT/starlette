@@ -31,6 +31,11 @@ public class DialogTextDB : ScriptableObject
                         "Alright... something's working again. One step at a time. Let's keep moving.",
                         }
                     },
+                    {
+                        DialogueID.Incomplete1, new List<string> {
+                        "This isn't working. I need to find another clue.",
+                        }
+                    },
                 }
             },
             {
@@ -55,6 +60,11 @@ public class DialogTextDB : ScriptableObject
                         DialogueID.Dialogue2, new List<string> {
                         "This message... it's corrupted. Someone tried to say something.",
                         "Why does everything feel... off? I need to find out what happened here.",
+                        }
+                    },
+                    {
+                        DialogueID.Incomplete1, new List<string> {
+                        "No response... Maybe I missed something.",
                         }
                     },
                 }
@@ -114,6 +124,16 @@ public class DialogTextDB : ScriptableObject
                         "Whatever's on the other side I need to know. I can't stop now.",
                         }
                     },
+                    {
+                        DialogueID.Incomplete1, new List<string> {
+                        "I need to solve the puzzle...",
+                        }
+                    },
+                    {
+                        DialogueID.Incomplete2, new List<string> {
+                        "I can't go back, i need to figure this out...",
+                        }
+                    },
                 }
             },
             {
@@ -121,9 +141,9 @@ public class DialogTextDB : ScriptableObject
                 {
                     {
                         DialogueID.Dialogue1, new List<string> {
-                        "Everything in here... it�s looping. Like it's alive and stuck in its own memory.",
+                        "Everything in here... it's looping. Like it's alive and stuck in its own memory.",
                         "No, no... I've seen this. I've walked this path before. Haven't I?",
-                        "There's something wrong in my mind. Like I�m sharing space with... with someone else.",
+                        "There's something wrong in my mind. Like I'm sharing space with... with someone else.",
                         "Those aren't reflections. They're echoes. Versions of me that never made it out?"
                         }
                     },
@@ -140,8 +160,8 @@ public class DialogTextDB : ScriptableObject
                     },
                     {
                         DialogueID.Dialogue4, new List<string> { //Text To Choose Decision
-                        "The capsule... it's active. I could leave. I could just�go home.",
-                        "But if I go now, I may never know what happened. Why everyone�s gone. Why I'm still here.",
+                        "The capsule... it's active. I could leave. I could just go home.",
+                        "But if I go now, I may never know what happened. Why everyone's gone. Why I'm still here.",
                         "This might be my only chance to find the truth.",
                         }
                     },
@@ -153,6 +173,11 @@ public class DialogTextDB : ScriptableObject
                     {
                         DialogueID.Dialogue6, new List<string> { // Ending 1 (GOOD ENDING)
                         "No. I need answers. I owe them that much.",
+                        }
+                    },
+                    {
+                        DialogueID.Incomplete1, new List<string> {
+                        "I can't go back, i need to figure this out...",
                         }
                     },
                 }
@@ -182,24 +207,19 @@ public class DialogTextDB : ScriptableObject
                         "I need to know the truth. No more running.",
                         }
                     },
-                }
-            },
-            {
-                RoomID.Status, new Dictionary<DialogueID, List<string>>
-                {
                     {
-                        DialogueID.Dialogue1, new List<string> {
-                        "This isn�t working. I need to find another clue.",
-                        }
-                    },
-                    {
-                        DialogueID.Dialogue2, new List<string> {
+                        DialogueID.Incomplete1, new List<string> {
                         "Something's off. I'll come back to this.",
                         }
                     },
+                }
+            },
+            {
+                RoomID.Room7, new Dictionary<DialogueID, List<string>>
+                {
                     {
-                        DialogueID.Dialogue3, new List<string> {
-                        "No response... Maybe I missed something.",
+                        DialogueID.Incomplete1, new List<string> {
+                        "It seems need a power, i need to find something.",
                         }
                     },
                 }

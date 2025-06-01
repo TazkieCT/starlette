@@ -12,7 +12,7 @@ public class RoomTrigger : MonoBehaviour
     {
         if (!hasRegistered && other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Debug.Log("Entered room: " + roomID);
+            //Debug.Log("Entered room: " + roomID);
             foreach (string puzzleID in puzzleIDsInThisRoom)
             {
                 RoomProgressManager.Instance.RegisterPuzzle(roomID, puzzleID);

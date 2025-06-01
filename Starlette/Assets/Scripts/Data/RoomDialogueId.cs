@@ -6,11 +6,11 @@ public enum RoomID
     Room4,
     Room5,
     Room6,
+    Room7,
     Puzzle1,
     Puzzle2,
     Puzzle3,
     Puzzle4,
-    Status
 }
 
 public enum DialogueID
@@ -23,4 +23,6 @@ public enum DialogueID
     Dialogue6,
     Success,
     Failed,
+    Incomplete1,
+    Incomplete2,
 }
