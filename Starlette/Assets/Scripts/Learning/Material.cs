@@ -97,7 +97,7 @@ public class Material : MonoBehaviour
             }
         }
 
-        Debug.Log($"Initialized {tutorialCanvases.Count} tutorial pages");
+        //Debug.Log($"Initialized {tutorialCanvases.Count} tutorial pages");
     }
     
     private void SetupNavigationButtons()

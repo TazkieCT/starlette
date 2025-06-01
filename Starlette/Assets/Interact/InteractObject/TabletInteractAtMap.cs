@@ -10,7 +10,7 @@ public class TabletInteractAtMap : MonoBehaviour, Interactable
     private String username;
     public void Interact()
     {
-        Debug.Log("Ini Fridge");
+        //Debug.Log("Ini Fridge");
         inventoryManager.AddItem(item);
         gameController.SetState("OnTablet");
         tabletManager.setStatusDialog1Interface(true);

@@ -38,8 +38,8 @@ public class TabletManager : MonoBehaviour
     public void CheckUsername(TextMeshProUGUI textarea)
     {
 
-        Debug.Log(textarea.text.ToString());
-        Debug.Log(String.IsNullOrEmpty(textarea.text.ToString()));
+        //Debug.Log(textarea.text.ToString());
+        //Debug.Log(String.IsNullOrEmpty(textarea.text.ToString()));
         if (string.IsNullOrWhiteSpace(textarea.text))
         {
             error.gameObject.SetActive(true);

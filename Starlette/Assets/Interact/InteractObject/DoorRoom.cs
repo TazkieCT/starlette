@@ -24,7 +24,7 @@ public class DoorRoom : MonoBehaviour, Interactable
             {
                 RoomProgressManager.Instance.EndRoom(roomData.roomID);
             }
-            Debug.Log("Move to next room.");
+            //Debug.Log("Move to next room.");
             if(currentRoom == RoomID.Room7)
             {
                 GameObject parent = GameObject.Find("Cutscene");
@@ -33,7 +33,7 @@ public class DoorRoom : MonoBehaviour, Interactable
         }
         else
         {
-            Debug.Log($"Cant move to next room. Progress {roomData.progress}%");
+            //Debug.Log($"Cant move to next room. Progress {roomData.progress}%");
             //Nanti disini kita panggil dialogue
             dialogueSystem.StartDialogue(currentRoom, errorDialogueMessage);
         }

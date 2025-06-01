@@ -209,7 +209,7 @@ void UpdatePacketDisplay(int value)
         forChoiceBlockMenu.SpawnNewObject(valueBlock, answer.iIncDec.ToString());
         forChoiceBlockMenu.SpawnNewObject(valueBlock, answer.packetIncDec.ToString());
         forChoiceBlockMenu.SpawnNewObject(operatorBlock, answer.iOp);
-        Debug.Log(answer.packetOp);
+        //Debug.Log(answer.packetOp);
         forChoiceBlockMenu.SpawnNewObject(operatorBlock, answer.packetOp);
 
 

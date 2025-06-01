@@ -45,7 +45,7 @@ public class WhilePuzzleTask : MonoBehaviour
         GenerateAnswer();
         GenerateBlock();
         
-        Debug.Log(packet);
+        //Debug.Log(packet);
     }
 
     public void Solve()

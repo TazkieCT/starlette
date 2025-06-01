@@ -1,11 +1,13 @@
+using Firebase.Extensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class RoomProgressManager : MonoBehaviour
 {
     public static RoomProgressManager Instance;
     public List<RoomProgressData> allRooms = new();
+    private HashSet<RoomID> uploadedRooms = new(); //Bikin ini biar tidak push ke db (room yang sama) berkali-kali
 
     private void Awake()
     {
@@ -70,8 +72,15 @@ public class RoomProgressManager : MonoBehaviour
     {
         var data = GetRoomData(room);
         int puzzlesLeft = data.unfinishedPuzzles.Count;
-        int total = Mathf.Max(data.totalPuzzles, 1); // hindari bagi nol
+        int total = Mathf.Max(data.totalPuzzles, 1);
         data.progress = 100f * (total - puzzlesLeft) / total;
+
+        // When progress reaches 100% and not uploaded yet
+        if (data.progress >= 100f && !uploadedRooms.Contains(room))
+        {
+            uploadedRooms.Add(room);   // Mark as uploaded
+            PushRoomDataToFirebase(data);  // Call your Firebase upload here
+        }
     }
 
     public RoomProgressData GetRoomData(RoomID room)
@@ -97,6 +106,47 @@ public class RoomProgressManager : MonoBehaviour
             total += room.timeSpent;
         }
         return total;
+    }
+
+    public void PushRoomDataToFirebase(RoomProgressData data)
+    {
+        //string username = PlayerPrefs.GetString("Username", "Guest");
+
+        //if (string.IsNullOrEmpty(username) || username == "Guest")
+        //{
+        //    Debug.LogWarning("No valid username found. Skipping upload.");
+        //    return;
+        //}
+
+        string username = "DummyUser123";
+
+        string roomName = data.roomID.ToString();
+
+        FirebaseManager.Instance.DBReference
+            .Child("roomProgress")
+            .Child(username)
+            .Child(roomName)
+            .SetRawJsonValueAsync(JsonUtility.ToJson(new RoomUploadPayload
+            {
+                room = roomName,
+                time = data.timeSpent,
+                timestamp = System.DateTime.UtcNow.ToString("o")
+            }))
+            .ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                    Debug.Log($"Room {roomName} progress pushed for user {username}");
+                else
+                    Debug.LogError("Failed to upload progress: " + task.Exception);
+            });
+    }
+
+    [System.Serializable]
+    public class RoomUploadPayload
+    {
+        public string room;
+        public float time;
+        public string timestamp;
     }
 
 }

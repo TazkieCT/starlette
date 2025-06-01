@@ -9,7 +9,7 @@ public class TriggerDialogue : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other);
+        //Debug.Log(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             //Debug.Log("Trigger Interact.");
