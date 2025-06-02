@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LeaveCapsule : MonoBehaviour, Interactable
+public class ActivateEnding : MonoBehaviour, Interactable
 {
     public GameObject endingScene;
 

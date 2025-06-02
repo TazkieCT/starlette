@@ -17,7 +17,6 @@ public class DialogueSystem : MonoBehaviour
     [Header("Dialogue Setup")]
     [SerializeField] private DialogTextDB dialogDB;
 
-
     [SerializeField] private PlayerMovement playerMovement;
     private List<string> dialogueLines;
     private int currentLineIndex = 0;
@@ -29,12 +28,12 @@ public class DialogueSystem : MonoBehaviour
     private void Awake()
     {
         if (dialogueCanvas != null)
-            dialogueCanvas.enabled = false;
+            dialogueCanvas.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (!dialogueCanvas.enabled) return;
+        if (!dialogueCanvas.gameObject.activeSelf) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -68,7 +67,7 @@ public class DialogueSystem : MonoBehaviour
         }
 
         if (dialogueCanvas != null)
-            dialogueCanvas.enabled = true;
+            dialogueCanvas.gameObject.SetActive(true);
 
         dialogueFinished = false;
         currentLineIndex = 0;
@@ -123,15 +122,12 @@ public class DialogueSystem : MonoBehaviour
 
     private void EndDialogue()
     {
-        dialogueCanvas.enabled = false;
+        dialogueCanvas.gameObject.SetActive(false);
         if (playerMovement != null)
         {
-            //Debug.Log("tes");
             playerMovement.canMove = true;
             GameObject gameInterface = GameObject.Find("Inventory").transform.GetChild(1).gameObject;
             gameInterface.SetActive(true);
         }
-
     }
-
 }
