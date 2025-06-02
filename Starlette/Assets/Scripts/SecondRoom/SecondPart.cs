@@ -333,7 +333,7 @@ public class SecondPart : MonoBehaviour
         {
             if (boolResult)
             {
-                Debug.Log("HORE BENAR GOBLOK");
+                //Debug.Log("HORE BENAR GOBLOK");
                 successErrorManagerScreen.SetStatusSuccesScreen(true);
                 Solve();
             }

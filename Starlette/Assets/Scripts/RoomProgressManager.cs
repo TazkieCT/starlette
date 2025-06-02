@@ -55,6 +55,7 @@ public class RoomProgressManager : MonoBehaviour
         {
             gameplayStartTime = Time.time;
             gameplayRunning = true;
+            Debug.Log("username = " + PlayerPrefs.GetString("Username"));
         }
     }
 
@@ -133,12 +134,17 @@ public class RoomProgressManager : MonoBehaviour
 
     public void PushAttemptToFirebase()
     {
+
+        //String username = "ZetKa"; // Ganti dengan username yang sesuai
+
+        Debug.Log("username = " + PlayerPrefs.GetString("Username"));
+
         if (!PlayerPrefs.HasKey("Username"))
         {
             Debug.LogWarning("Username key not found. Skipping attempt push.");
             return;
         }
-        
+
         string username = PlayerPrefs.GetString("Username");
 
         if (string.IsNullOrEmpty(username))
@@ -146,7 +152,7 @@ public class RoomProgressManager : MonoBehaviour
             Debug.LogWarning("No valid username found. Skipping attempt push.");
             return;
         }
-            
+
         var attemptsRef = FirebaseManager.Instance.DBReference
             .Child("gameProgress")
             .Child(username)
