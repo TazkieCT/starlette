@@ -5,6 +5,7 @@ public class MainMenu : MonoBehaviour
     [Header("UI Elements")]
     public GameObject startGameUI;
     public GameObject loginGameUI;
+    public GameObject logoutButton;
 
     private void Start()
     {
@@ -13,15 +14,24 @@ public class MainMenu : MonoBehaviour
             // Load the saved username and proceed to the main menu
             startGameUI.SetActive(true);
             loginGameUI.SetActive(false);
+            logoutButton.SetActive(true);
         }
         else
         {
             // Show the login UI if no username is saved
             startGameUI.SetActive(false);
             loginGameUI.SetActive(true);
+            logoutButton.SetActive(false);
         }
     }
 
+    public void OnLogOutButton()
+    {
+        PlayerPrefs.DeleteKey("Username");
+        startGameUI.SetActive(false);
+        loginGameUI.SetActive(true);
+        logoutButton.SetActive(false);
+    }
 
     public void StartGame()
     {
