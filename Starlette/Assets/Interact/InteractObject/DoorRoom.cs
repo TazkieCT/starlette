@@ -28,7 +28,8 @@ public class DoorRoom : MonoBehaviour, Interactable
             if(currentRoom == RoomID.Room7)
             {
                 GameObject parent = GameObject.Find("Cutscene");
-                parent.transform.GetChild(0).gameObject.SetActive(true);
+                
+                parent.transform.GetChild(1).gameObject.SetActive(true);
                 RoomProgressManager.Instance.OnGameFinished();
             }
         }

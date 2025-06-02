@@ -75,18 +75,7 @@ public class RoomProgressManager : MonoBehaviour
             return totalGameplayTime;
     }
 
-    //public void StartRoom(RoomID room)
-    //{
-    //    var data = GetRoomData(room);
-    //    data.startTime = Time.time;
-    //}
 
-    //public void EndRoom(RoomID room)
-    //{
-    //    var data = GetRoomData(room);
-    //    data.timeSpent += Time.time - data.startTime;
-        // data.startTime = 0f;
-    //}
 
     public void RegisterPuzzle(RoomID room, string puzzleID)
     {
