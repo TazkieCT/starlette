@@ -36,10 +36,10 @@ public class RoomProgressManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        StartGameplayTimer();
-    }
+    //private void Start()
+    //{
+    //    StartGameplayTimer();
+    //}
 
     //void Update()
     //{
