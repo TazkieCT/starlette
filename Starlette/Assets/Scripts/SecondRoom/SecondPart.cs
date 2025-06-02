@@ -166,7 +166,7 @@ public class SecondPart : MonoBehaviour
         if (variableBlock == null)
         {
             Debug.LogError("First block is not a VariableBlock.");
-            
+            successErrorManagerScreen.SetStatusErrorScreen(true,"First block is not a VariableBlock.");
             return;
         }
 
@@ -184,10 +184,12 @@ public class SecondPart : MonoBehaviour
         if (assignmentObject == null)
         {
             Debug.LogError("Assignment block is not of type AssignmentOperatorBlock.");
+            successErrorManagerScreen.SetStatusErrorScreen(true,"Assignment block is not of type AssignmentOperatorBlock.");
             return;
         }
 
         List<CodeBlock> codeBlocks = new List<CodeBlock>();
+        CodeBlock prev = null;
         foreach (GameObject block in blocks)
         {
             CodeBlock codeBlock = block.GetComponent<CodeBlock>();
@@ -196,18 +198,26 @@ public class SecondPart : MonoBehaviour
                 Debug.LogError($"Block {block.name} is not a valid CodeBlock.");
                 return;
             }
-            // Debug.Log($"Adding block {codeBlock.ToString()} to code blocks.");
-            codeBlocks.Add(codeBlock);
 
+            if(prev != null)
+            {
+                PayloadResultModel validation = CodeBlock.ValidateBlockPlacement(codeBlock, prev);
+                if (validation.Success == false)
+                {
+                    Debug.LogError(validation.Message);
+                    successErrorManagerScreen.SetStatusErrorScreen(true, validation.Message);
+                    return;
+                }
+            }
+            prev = codeBlock;
+            codeBlocks.Add(codeBlock);
         }
 
         List<CodeBlock> postFix = ExpressionTreeBuilder.ToPostfix(codeBlocks);
         CodeBlock root = ExpressionTreeBuilder.BuildExpressionTree(postFix);
-        // Debug.Log($"Root of expression tree: {root.Evaluate(context)}");
-        Debug.Log(root);
         if (root == null)
         {
-            successErrorManagerScreen.SetStatusErrorScreen(true, "Fill the Block!!");
+            successErrorManagerScreen.SetStatusErrorScreen(true, "Fill them in a Correct Order!!");
             Debug.LogError("Failed to build expression tree from blocks.");
             return;
         }
@@ -218,18 +228,36 @@ public class SecondPart : MonoBehaviour
 
         object result = assignmentObject.Evaluate(context);
         // Debug.Log($"Assignment result: {(result is VariableBlock ? "Yes" : "maklo")}");
-        if (result is VariableBlock blockResult)
+        if (result is PayloadResultModel payload)
         {
-            BlockHolder secondHolder = secondPart.GetComponentInChildren<BlockHolder>();
-            if (secondHolder == null)
+            if (payload.Payload is VariableBlock blockResult)
             {
-                Debug.LogError("BlockHolder not found in the second part.");
-                return;
+
+                if (payload.Success)
+                {
+                    BlockHolder secondHolder = secondPart.GetComponentInChildren<BlockHolder>();
+                    if (secondHolder == null)
+                    {
+                        Debug.LogError("BlockHolder not found in the second part.");
+                        return;
+                    }
+                    //karena dari assignmentnya udah ngasih block yang baru, jadi kita tinggal ambil aja trus cantolin ke holder
+                    secondHolder.AddBlock(blockResult.gameObject);
+                    ResetContainerState(holder);
+                }
+                else
+                {
+                    Destroy(blockResult.gameObject);
+                    successErrorManagerScreen.SetStatusErrorScreen(true, payload.Message);
+                }
             }
-            //karena dari assignmentnya udah ngasih block yang baru, jadi kita tinggal ambil aja trus cantolin ke holder
-            secondHolder.AddBlock(blockResult.gameObject);
+            else
+            {
+                successErrorManagerScreen.SetStatusErrorScreen(true, payload.Message);
+            }
+
         }
-        ResetContainerState(holder);
+        
     }
 
     private void ResetContainerState(BaseBlockContainer container)
@@ -343,6 +371,11 @@ public class SecondPart : MonoBehaviour
                 dialogueSystem.StartDialogue(RoomID.Room2, DialogueID.Failed);
             }
                 
+        }
+        else if(result is PayloadResultModel payloadResult)
+        {
+            successErrorManagerScreen.SetStatusErrorScreen(true, payloadResult.Message);
+
         }
         else
         {
