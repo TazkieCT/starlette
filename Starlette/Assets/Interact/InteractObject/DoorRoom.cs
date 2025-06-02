@@ -32,6 +32,11 @@ public class DoorRoom : MonoBehaviour, Interactable
                 parent.transform.GetChild(1).gameObject.SetActive(true);
                 RoomProgressManager.Instance.OnGameFinished();
             }
+
+            if (currentRoom == RoomID.Room6)
+            {
+                RoomProgressManager.Instance.OnGameFinished();
+            }
         }
         else
         {

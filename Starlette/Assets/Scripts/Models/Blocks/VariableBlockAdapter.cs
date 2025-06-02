@@ -27,7 +27,7 @@ public class VariableBlockAdapter : VariableBlock
     public void TextFieldChanged()
     {
         VariableName = variableNameText.text;
-        Debug.Log($"Variable name changed to: {VariableName}");
+        //Debug.Log($"Variable name changed to: {VariableName}");
     }
 
     public void DropdownOptionChanged()
