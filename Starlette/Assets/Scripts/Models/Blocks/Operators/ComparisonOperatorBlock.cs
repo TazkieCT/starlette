@@ -24,7 +24,7 @@ public class ComparisonOperatorBlock : OperatorBlock
     {
         float leftValue = FloatType.ParseValue(leftOperandBlock.Evaluate(context));
         float rightValue = FloatType.ParseValue(rightOperandBlock.Evaluate(context));
-        Debug.Log($"Evaluating Comparison: {leftValue} {ComparisonType} {rightValue}");
+        //Debug.Log($"Evaluating Comparison: {leftValue} {ComparisonType} {rightValue}");
         return ComparisonType switch
         {
             ComparisonType.Equal => leftValue.Equals(rightValue),

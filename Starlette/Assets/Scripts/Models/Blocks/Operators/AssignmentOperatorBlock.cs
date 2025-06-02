@@ -33,7 +33,7 @@ public class AssignmentOperatorBlock : OperatorBlock
 
             // right operand will always be a CodeBlock
             object value = rightOperandBlock.Evaluate(context);
-            Debug.Log($"Evaluating Assignment: {variableName} to {value}");
+            //Debug.Log($"Evaluating Assignment: {variableName} to {value}");
             PayloadResultModel result = MatchDataType(variableBlock, value);
             if (!result.Success)
             {

@@ -25,7 +25,7 @@ public class LogicalOperator : OperatorBlock
     {
         bool leftValue = (bool)leftOperandBlock.Evaluate(context);
         bool rightValue = (bool)rightOperandBlock.Evaluate(context);
-        Debug.Log($"Evaluating Logical: {leftValue} {Operator} {rightValue}");
+        //Debug.Log($"Evaluating Logical: {leftValue} {Operator} {rightValue}");
         return Operator switch
         {
             LogicalOperatorType.AND => leftValue && rightValue,
