@@ -15,8 +15,17 @@ public static class ExpressionTreeBuilder
             }
             else if (block is OperatorBlock op)
             {
-                op.setRightChild(stack.Pop());
-                op.setLeftChild(stack.Pop());
+                try
+                {
+                    op.setRightChild(stack.Pop());
+                    op.setLeftChild(stack.Pop());
+                }
+                catch (System.InvalidOperationException)
+                {
+                    Debug.WriteLine("Invalid expression: not enough operands for operator.");
+                    return null;
+                }
+
                 stack.Push(op);
             }
         }

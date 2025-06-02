@@ -22,8 +22,34 @@ public class ComparisonOperatorBlock : OperatorBlock
 
     public override object Evaluate(CompilerContext context)
     {
-        float leftValue = FloatType.ParseValue(leftOperandBlock.Evaluate(context));
-        float rightValue = FloatType.ParseValue(rightOperandBlock.Evaluate(context));
+        object leftResult = leftOperandBlock.Evaluate(context);
+        object rightResult = rightOperandBlock.Evaluate(context);
+        if(leftResult is bool && rightResult is bool)
+        {
+            if (ComparisonType == ComparisonType.Equal)
+            {
+                return (bool)leftResult == (bool)rightResult;
+            }
+
+            return PayloadResultModel.ResultError("Comparison requires Numeric, exclude equal operator for boolean values.");
+            
+        }
+        if (leftResult is bool || rightResult is bool)
+        {
+            return PayloadResultModel.ResultError("Comparison requires Numeric values, exclude equal operator for boolean values.");
+        }
+        if(leftResult is PayloadResultModel a)
+        {
+            return PayloadResultModel.ResultError(a.Message);
+        }
+        if(rightResult is PayloadResultModel b)
+        {
+            return PayloadResultModel.ResultError(b.Message);
+        }
+        // Debug.Log($"Evaluating Comparison: {leftResult} {ComparisonType} {rightResult}");
+
+        float leftValue = FloatType.ParseValue(leftResult);
+        float rightValue = FloatType.ParseValue(rightResult);
         //Debug.Log($"Evaluating Comparison: {leftValue} {ComparisonType} {rightValue}");
         return ComparisonType switch
         {

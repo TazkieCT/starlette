@@ -17,4 +17,14 @@ public class PayloadResultModel
     {
         return $"Error: {Message}\n";
     }
+
+    public static PayloadResultModel ResultSuccess(string message, object payload = null)
+    {
+        return new PayloadResultModel(message, true, payload);
+    }
+
+    public static PayloadResultModel ResultError(string message, object payload = null)
+    {
+        return new PayloadResultModel(message, false, payload);
+    }
 }

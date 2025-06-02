@@ -23,8 +23,15 @@ public class LogicalOperator : OperatorBlock
 
     public override object Evaluate(CompilerContext context)
     {
-        bool leftValue = (bool)leftOperandBlock.Evaluate(context);
-        bool rightValue = (bool)rightOperandBlock.Evaluate(context);
+        object leftResult = leftOperandBlock.Evaluate(context);
+        object rightResult = rightOperandBlock.Evaluate(context);
+        if(leftResult is not bool || rightResult is not bool)
+        {
+            return PayloadResultModel.ResultError("Logical operator requires both operands to be boolean values.");
+        }
+
+        bool leftValue = (bool)leftResult;
+        bool rightValue = (bool)rightResult;
         //Debug.Log($"Evaluating Logical: {leftValue} {Operator} {rightValue}");
         return Operator switch
         {
@@ -71,8 +78,8 @@ public class LogicalOperator : OperatorBlock
         if (Operator == LogicalOperatorType.Random)
         {
             Operator = (LogicalOperatorType)UnityEngine.Random.Range(0, 2);
-            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
         }   
+        gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
     }
 
     public override int Precedence => 1;

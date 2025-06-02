@@ -29,8 +29,10 @@ public class ArithmeticOperatorBlock : OperatorBlock
         object right = rightOperandBlock.Evaluate();
 
         // Kondisinya itu kiri antar
-            Debug.Log($"Evaluating Arithmetic: {left} {BlockType} {right}");
-        if (left is float t || right is float r||
+        Debug.Log($"Evaluating Arithmetic: {left} {BlockType} {right}");
+        try
+        {
+                    if (left is float t || right is float r||
         (FloatType.ParseValue(left) % FloatType.ParseValue(right) != 0.0f && BlockType == ArithmeticType.Divide) || 
         ((int)left % (int)right != 0 && BlockType == ArithmeticType.Divide))
         {
@@ -60,6 +62,11 @@ public class ArithmeticOperatorBlock : OperatorBlock
                 ArithmeticType.Modulo => leftInt % rightInt,
                 _ => throw new NotImplementedException()
             };
+        }
+        }
+        catch (Exception)
+        {
+            return PayloadResultModel.ResultError("Wrong Block Inserted...");
         }
     }
 

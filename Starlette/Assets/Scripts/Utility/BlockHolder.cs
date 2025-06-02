@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockHolder : BaseBlockContainer
@@ -14,73 +15,95 @@ public class BlockHolder : BaseBlockContainer
     protected override void UpdateBlockPositions()
     {
         CleanupNullBlocks();
-        
+
         if (blocks.Count == 0)
         {
             totalWidth = 0f;
             return;
         }
-        
-        float currentX = 0f;
-        totalWidth = 0f;
-        
+
         RectTransform panel = GetComponent<RectTransform>();
-        float panelWidth = 1f;
-        if (panel != null)
-        {
-            panelWidth = Mathf.Abs(panel.rect.width);
-            if (panelWidth <= 0)
-            {
-                panelWidth = Mathf.Abs(panel.sizeDelta.x);
-            }
-        }
-        
-        // Calculate total width first
-        for (int i = 0; i < blocks.Count; i++)
-        {
-            float blockWidth = GetBlockWidth(blocks[i]);
-            totalWidth += blockWidth;
-            if (i < blocks.Count - 1)
-            {
-                totalWidth += blockSpacing;
-            }
-        }
-        
-        // Calculate starting position
-        float startX = centerHolderHorizontally ? 0f : -panelWidth / 2f;
-        currentX = startX;
-        
-        // Position each block
+        float panelWidth = panel.rect.width;
+
+        float currentX = !centerHolderHorizontally ? 0f - panelWidth / 2f : 0f;
+
+        // Prepare to track rows
+        List<List<GameObject>> rows = new List<List<GameObject>>();
+        List<GameObject> currentRow = new List<GameObject>();
+
+        // First, determine how many rows there will be and which blocks go where
         for (int i = 0; i < blocks.Count; i++)
         {
             GameObject block = blocks[i];
             float blockWidth = GetBlockWidth(block);
-            
-            Vector3 newPosition = new Vector3(currentX + blockWidth / 2f, 0f, 0f);
-            
-            if (snapToGrid)
+
+            // Check if this block would overflow
+            if (currentX + (panelWidth / 2f) + blockWidth > panelWidth && currentRow.Count > 0)
             {
-                newPosition.x = Mathf.Round(newPosition.x / gridSize) * gridSize;
-                newPosition.y = Mathf.Round(newPosition.y / gridSize) * gridSize;
+                // Move to next row
+                rows.Add(currentRow);
+                currentRow = new List<GameObject>();
+                currentX = !centerHolderHorizontally ? 0f - panelWidth / 2f : 0f;
             }
-            
-            RectTransform rectTransform = block.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                rectTransform.anchoredPosition = newPosition;
-                if (rectTransform.anchorMin != new Vector2(0.5f, 0.5f) || 
-                    rectTransform.anchorMax != new Vector2(0.5f, 0.5f))
-                {
-                    rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-                    rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-                }
-            }
-            else
-            {
-                block.transform.localPosition = newPosition;
-            }
-            
+
+            currentRow.Add(block);
             currentX += blockWidth + blockSpacing;
+        }
+
+        // Add the final row
+        if (currentRow.Count > 0)
+            rows.Add(currentRow);
+
+        int rowsCount = rows.Count;
+
+        // Determine the starting y position to center rows
+        float totalRowsHeight = (rowsCount - 1) * (blockHeight + blockSpacing);
+        float startY = totalRowsHeight / 2f;
+
+        // Now position each block in each row
+        for (int rowIndex = 0; rowIndex < rows.Count; rowIndex++)
+        {
+            List<GameObject> row = rows[rowIndex];
+
+            // Reset x for this row
+            float currentRowX = !centerHolderHorizontally ? 0f - panelWidth / 2f : 0f;
+
+            float currentY = startY - rowIndex * (blockHeight + blockSpacing);
+
+            foreach (GameObject block in row)
+            {
+                float blockWidth = GetBlockWidth(block);
+
+                Vector3 newPosition = new Vector3(currentRowX + blockWidth / 2f, currentY, 0f);
+
+                if (snapToGrid)
+                {
+                    newPosition.x = Mathf.Round(newPosition.x / gridSize) * gridSize;
+                    newPosition.y = Mathf.Round(newPosition.y / gridSize) * gridSize;
+                }
+
+                RectTransform rectTransform = block.GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    rectTransform.anchoredPosition = newPosition;
+                }
+                else
+                {
+                    block.transform.localPosition = newPosition;
+                }
+
+                currentRowX += blockWidth + blockSpacing;
+            }
+        }
+
+        // Update Content's height to fit all rows
+        float contentHeight = totalRowsHeight + blockHeight; // add one blockHeight for first row
+        RectTransform contentRect = GetComponent<RectTransform>();
+        if (contentRect != null)
+        {
+            Vector2 size = contentRect.sizeDelta;
+            size.y = contentHeight;
+            contentRect.sizeDelta = size;
         }
     }
     
