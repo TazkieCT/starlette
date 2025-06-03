@@ -124,7 +124,7 @@ public class SecondPart : MonoBehaviour
         float x = -180.0f + container.GetSpacing();
         foreach (ArithmeticType type in System.Enum.GetValues(typeof(ArithmeticType)))
         {
-            if (type == ArithmeticType.Random) continue; // skip Random type
+            if (type == ArithmeticType.Random || type == ArithmeticType.RandomNoModulo) continue; // skip Random type   
             ArithmeticOperatorBlock arithmeticBlock = blockFactory.CreateBlock(BlockType.ArithmeticOperator, type, container.transform).GetComponent<ArithmeticOperatorBlock>();
             arithmeticBlock.Init(type);
             arithmeticBlock.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = arithmeticBlock.ToString();

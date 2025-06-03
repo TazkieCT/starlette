@@ -27,8 +27,18 @@ public class LogicalOperator : OperatorBlock
         object rightResult = rightOperandBlock.Evaluate(context);
         if(leftResult is not bool || rightResult is not bool)
         {
+            Debug.LogError(leftResult.GetType() + " " + rightResult.GetType());
+            if(leftResult is PayloadResultModel leftError)
+            {
+                Debug.LogError(leftError.Message);
+            }
+            else if (rightResult is PayloadResultModel rightError)
+            {
+                Debug.LogError(rightError.Message);
+            }
             return PayloadResultModel.ResultError("Logical operator requires both operands to be boolean values.");
         }
+
 
         bool leftValue = (bool)leftResult;
         bool rightValue = (bool)rightResult;
