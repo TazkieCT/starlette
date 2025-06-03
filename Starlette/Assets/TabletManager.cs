@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TabletManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class TabletManager : MonoBehaviour
     public TextMeshProUGUI greetingText;
     public bool isDialogFinish;
     private string username;
+    public TMP_InputField textarea;
     void Start()
     {
         isDialogFinish = true;
@@ -35,11 +37,11 @@ public class TabletManager : MonoBehaviour
             isDialogFinish = true;
         }
     }
-    public void CheckUsername(TextMeshProUGUI textarea)
+    public void CheckUsername()
     {
 
-        //Debug.Log(textarea.text.ToString());
-        //Debug.Log(String.IsNullOrEmpty(textarea.text.ToString()));
+        Debug.Log(textarea.text.ToString());
+        Debug.Log(String.IsNullOrWhiteSpace(textarea.text));
         if (string.IsNullOrWhiteSpace(textarea.text))
         {
             error.gameObject.SetActive(true);
