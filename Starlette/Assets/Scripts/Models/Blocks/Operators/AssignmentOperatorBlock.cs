@@ -64,9 +64,8 @@ public class AssignmentOperatorBlock : OperatorBlock
                 Debug.LogError($"{declareResult.Message}");
                 return new PayloadResultModel(declareResult.Message, false, newVariableBlock.GetComponent<VariableBlock>());
             }
-            Debug.Log($"Assignment successful: {variableName}, newVariableValue: {newValue.GetValue().GetValue()}");
 
-            return newVariableBlock.GetComponent<VariableBlock>();
+            return PayloadResultModel.ResultSuccess($"Assignment successful: {variableName}, newVariableValue: {newValue.GetValue().GetValue()}", newVariableBlock.GetComponent<VariableBlock>());
         }
         else
         {
@@ -77,7 +76,6 @@ public class AssignmentOperatorBlock : OperatorBlock
     private PayloadResultModel MatchDataType(VariableBlock variableBlock, object result)
     {
         DataType variableType = variableBlock.GetDataType();
-        // Debug.Log($"Type of variable: {(variableType is Integer ? "Integer ni" : "Kontol")}, Result type: {(result is int ? "int" : "maklo")}");
         if (variableType is Integer && result is int)
         {
             variableType.Value = Integer.ParseValue(result);
@@ -92,13 +90,11 @@ public class AssignmentOperatorBlock : OperatorBlock
         }
         else if (result is null)
         {
-            Debug.LogError("Assignment result is null.");
             return new PayloadResultModel("Assignment result is null.", false);
         }
         else
         {
-            Debug.LogError("Execution Failed.");
-            return new PayloadResultModel("Execution Failed.", false);
+            return new PayloadResultModel("Data Type Mismatch.", false);
         }
 
         return new PayloadResultModel("Execution Successful.", true, variableType);
