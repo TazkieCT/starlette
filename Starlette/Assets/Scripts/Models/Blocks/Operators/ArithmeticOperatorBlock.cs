@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 
 
-public enum ArithmeticType { Add, Substract, Multiply, Divide, Modulo, Random }
+public enum ArithmeticType { Add, Substract, Multiply, Divide, Modulo, Random, RandomNoModulo }
 
 
 public class ArithmeticOperatorBlock : OperatorBlock
@@ -12,11 +12,15 @@ public class ArithmeticOperatorBlock : OperatorBlock
     public ArithmeticType BlockType;
     protected override void AdditionalAwake()
     {
-        if (BlockType == ArithmeticType.Random)
+        if (BlockType == ArithmeticType.RandomNoModulo)
         {
-            BlockType = (ArithmeticType)UnityEngine.Random.Range(0, 5);
+            BlockType = (ArithmeticType)UnityEngine.Random.Range(0, 4);
             // Debug.Log($"Random Arithmetic Operator: {BlockType}, {ToString()}");
         }   
+        else if (BlockType == ArithmeticType.Random)
+        {
+            BlockType = (ArithmeticType)UnityEngine.Random.Range(0, 5);
+        }
         gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
     }
     public override object Evaluate(CompilerContext context = null)
@@ -26,45 +30,118 @@ public class ArithmeticOperatorBlock : OperatorBlock
         object left = leftOperandBlock.Evaluate();
         object right = rightOperandBlock.Evaluate();
 
-        // Kondisinya itu kiri antar
         Debug.Log($"Evaluating Arithmetic: {left} {BlockType} {right}");
+
+        bool isFloat = left is float || right is float;
+        bool isDivide = BlockType == ArithmeticType.Divide;
+        bool isModulo = BlockType == ArithmeticType.Modulo;
+
+        int leftInt = 0;
+        int rightInt = 0;
+        float leftFloat = 0f;
+        float rightFloat = 0f;
+
+        // Step 1: Try parse int values
         try
         {
-                    if (left is float t || right is float r||
-        (FloatType.ParseValue(left) % FloatType.ParseValue(right) != 0.0f && BlockType == ArithmeticType.Divide) || 
-        ((int)left % (int)right != 0 && BlockType == ArithmeticType.Divide))
-        {
-            float leftFloat = FloatType.ParseValue(left);
-            float rightFloat = FloatType.ParseValue(right);
-            return BlockType switch
+            if (!isFloat)
             {
-                ArithmeticType.Add => leftFloat + rightFloat,
-                ArithmeticType.Substract => leftFloat - rightFloat,
-                ArithmeticType.Multiply => leftFloat * rightFloat,
-                ArithmeticType.Divide => rightFloat == 0 ? throw new Exception("Divide By Zero") : leftFloat / rightFloat,
-                ArithmeticType.Modulo => leftFloat % rightFloat,
-                _ => throw new NotImplementedException()
-            };
+                leftInt = Integer.ParseValue(left);
+                rightInt = Integer.ParseValue(right);
+            }
         }
-        else
+        catch (Exception e)
         {
-            // hasilnya pasti integer. (kecuali bagi)
-            int leftInt = Integer.ParseValue(left);
-            int rightInt = Integer.ParseValue(right);
-            return BlockType switch
+            Debug.LogError($"[Int Parse Error] Cannot parse int from: {left} or {right} — {e.Message}");
+            return PayloadResultModel.ResultError($"Invalid integer operand: {e.Message}");
+        }
+
+        // Step 2: Try parse float values if needed
+        try
+        {
+            if (isFloat || isDivide || isModulo)
             {
-                ArithmeticType.Add => leftInt + rightInt,
-                ArithmeticType.Substract => leftInt - rightInt,
-                ArithmeticType.Multiply => leftInt * rightInt,
-                ArithmeticType.Divide => rightInt == 0 ? throw new Exception("Divide By Zero") : leftInt / rightInt,
-                ArithmeticType.Modulo => leftInt % rightInt,
-                _ => throw new NotImplementedException()
-            };
+                leftFloat = FloatType.ParseValue(left);
+                rightFloat = FloatType.ParseValue(right);
+            }
         }
-        }
-        catch (Exception)
+        catch (Exception e)
         {
-            return PayloadResultModel.ResultError("Wrong Block Inserted...");
+            Debug.LogError($"[Float Parse Error] Cannot parse float from: {left} or {right} — {e.Message}");
+            return PayloadResultModel.ResultError($"Invalid float operand: {e.Message}");
+        }
+
+        // Step 3: Division/Modulo by Zero Validation
+        try
+        {
+            if ((isDivide || isModulo))
+            {
+                if (isFloat && rightFloat == 0f)
+                    throw new DivideByZeroException();
+
+                if (!isFloat && rightInt == 0)
+                    throw new DivideByZeroException();
+            }
+        }
+        catch (DivideByZeroException e)
+        {
+            Debug.LogError($"[Zero Division] Divide by zero error: {left} {BlockType} {right}");
+            return PayloadResultModel.ResultError("Divide by zero is not allowed.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Validation Error] While checking divide/modulo by zero: {e.Message}");
+            return PayloadResultModel.ResultError(e.Message);
+        }
+
+        // Step 4: Check for forced float result due to remainder
+        try
+        {
+            if (!isFloat && isDivide && rightInt != 0 && leftInt % rightInt != 0)
+            {
+                isFloat = true;
+                leftFloat = FloatType.ParseValue(left);
+                rightFloat = FloatType.ParseValue(right);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Modulo Check Error] Cannot determine int remainder: {e.Message}");
+            return PayloadResultModel.ResultError($"Error during modulo check: {e.Message}");
+        }
+
+        // Step 5: Final Evaluation
+        try
+        {
+            if (isFloat)
+            {
+                return BlockType switch
+                {
+                    ArithmeticType.Add => leftFloat + rightFloat,
+                    ArithmeticType.Substract => leftFloat - rightFloat,
+                    ArithmeticType.Multiply => leftFloat * rightFloat,
+                    ArithmeticType.Divide => leftFloat / rightFloat,
+                    ArithmeticType.Modulo => leftFloat % rightFloat,
+                    _ => throw new NotImplementedException()
+                };
+            }
+            else
+            {
+                return BlockType switch
+                {
+                    ArithmeticType.Add => leftInt + rightInt,
+                    ArithmeticType.Substract => leftInt - rightInt,
+                    ArithmeticType.Multiply => leftInt * rightInt,
+                    ArithmeticType.Divide => leftInt / rightInt,
+                    ArithmeticType.Modulo => leftInt % rightInt,
+                    _ => throw new NotImplementedException()
+                };
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Evaluation Error] Failed evaluating {left} {BlockType} {right}: {e.Message}");
+            return PayloadResultModel.ResultError($"Final evaluation error: {e.Message}");
         }
     }
 
