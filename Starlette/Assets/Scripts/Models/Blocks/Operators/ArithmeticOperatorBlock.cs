@@ -16,8 +16,8 @@ public class ArithmeticOperatorBlock : OperatorBlock
         {
             BlockType = (ArithmeticType)UnityEngine.Random.Range(0, 5);
             // Debug.Log($"Random Arithmetic Operator: {BlockType}, {ToString()}");
-            gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
         }   
+        gameObject.GetComponentInChildren<TextMeshProUGUI>().text = ToString();
     }
     public override object Evaluate(CompilerContext context = null)
     {
