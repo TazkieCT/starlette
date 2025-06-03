@@ -159,8 +159,9 @@ public class FirstPart : MonoBehaviour
         codeBlocks.RemoveAt(0);
         codeBlocks.RemoveAt(0);
         List<CodeBlock> postFix = ExpressionTreeBuilder.ToPostfix(codeBlocks);
+        Debug.Log($"Postfix expression: {string.Join(", ", postFix)}");
         CodeBlock root = ExpressionTreeBuilder.BuildExpressionTree(postFix);
-        // Debug.Log($"Root of expression tree: {((LiteralBlock)root).GetValue().GetValue()}");
+        Debug.Log($"Root of expression tree: {((LiteralBlock)root).GetValue().GetValue()}");
         if (root == null)
         {
             Debug.LogError("Failed to build expression tree from blocks.");
@@ -170,18 +171,31 @@ public class FirstPart : MonoBehaviour
         assignmentObject.setRightChild(root);
 
         object result = assignmentObject.Evaluate(context);
-
+        Debug.Log($"Result of assignment: {result}");
         if (result is VariableBlock a)
         {
             Destroy(a.gameObject);
             ResetContainerState(holder);
+          
         }
         else if (result is PayloadResultModel payloadResultModel)
         {
-            if (!payloadResultModel.Success)
+            if (payloadResultModel.Payload is VariableBlock blockResult)
+            {
+                if (payloadResultModel.Success)
+                {
+                    Destroy(blockResult.gameObject);
+                    ResetContainerState(holder);
+                }
+                else
+                {
+                    successErrorManagerScreen.SetStatusErrorScreen(true, payloadResultModel.Message);
+                    Destroy(((VariableBlock)payloadResultModel.Payload).gameObject);
+                }
+            }
+            else
             {
                 successErrorManagerScreen.SetStatusErrorScreen(true, payloadResultModel.Message);
-                Destroy(((VariableBlock)payloadResultModel.Payload).gameObject);
             }
         }
 
