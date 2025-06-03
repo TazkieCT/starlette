@@ -34,20 +34,23 @@ public class GameController : MonoBehaviour
     {
         if (state == GameState.FreeRoam)
         {
+            playerMovement.StartMove();
             playerMovement.HandleUpdate();
             oxygenBar.HandleUpdate();
         }
         else if (state == GameState.Interacting)
         {
             DialogManager.Instance.HandleUpdate();
+            playerMovement.StopMove();
         }
         else if (state == GameState.OnTablet)
         {
             tabletManager.HandleUpdate();
+            playerMovement.StopMove();
         }
         else if (state == GameState.OnPuzzle)
         {
-            
+            playerMovement.StopMove();
         }
     }
 }

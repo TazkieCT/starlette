@@ -28,6 +28,8 @@ public class PanelInteractBehavior : MonoBehaviour, Interactable
         if (panelChild == null)
         {
             backgroundPanel.GetComponent<OpenCloseBehavior>().OpenPanel(panelInterface.name);
+            GameObject parttwo = GameObject.Find("SecondRoomSecondPartPuzzle").gameObject;
+            parttwo.SetActive(false);
         }
         else
         {
