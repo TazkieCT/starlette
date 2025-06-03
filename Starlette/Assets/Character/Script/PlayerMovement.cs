@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -60,7 +61,17 @@ public class PlayerMovement : MonoBehaviour
             Interact();
         }
     }
-
+    public void StartMove()
+    {
+        canMove = true;
+    }
+    public void StopMove()
+    {
+        canMove = false;
+        inputMovement = Vector2.zero;
+        characterBody.linearVelocity = Vector2.zero;
+        animator.SetBool("isMoving", false);
+    }
     void Interact()
     {
         Vector2 interactPosition = (Vector2)transform.position + lastDirection * interactRange;
