@@ -1,9 +1,7 @@
 
 <!-- ![Header GIF](https://github.com/TazkieCT/starlette/blob/test_merge/images/pixil-gif-drawing.gif) -->
+![Full Header with Background](https://github.com/TazkieCT/starlette/blob/test_merge/images/pixil-gif-drawing.gif)
 
-<table width="100%">
-<tr>
-<td background="https://github.com/TazkieCT/starlette/blob/test_merge/images/pixil-gif-drawing.gif">
 
 # 🌟 Starlette - An Educational Puzzle Game
 
@@ -67,7 +65,5 @@ cd starlette-game
 ```
 ### or install the game:
 https://starlette-web-shxg.vercel.app/
-</td>
-</tr>
-</table>
+
 
