@@ -1,3 +1,6 @@
+
+
+
 # 🌟 Starlette - An Educational Puzzle Game
 
 **Starlette** is an engaging 2D escape room puzzle game that subtly teaches players programming logic through interactive challenges. Inspired by commercial-quality games, Starlette disguises learning in fun mechanics—perfect for players who "accidentally" learn while having fun!
@@ -37,6 +40,7 @@ Starlette places the player inside a mysterious digital lab where the only way o
 <img src="images/Custscene.jpg" alt="Game CutScene" width="600"/>
 </p>
 
+<img src="images/pixil-gif-drawing.gif"/>
 ---
 
 ## 🛠️ Built With
