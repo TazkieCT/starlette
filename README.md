@@ -1,5 +1,5 @@
 
-
+![Header GIF](https://github.com/TazkieCT/starlette/blob/test_merge/images/pixil-gif-drawing.gif)
 
 # 🌟 Starlette - An Educational Puzzle Game
 
