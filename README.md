@@ -1,4 +1,4 @@
-![Starlette ANimation](https://example.com/hello.gif)
+![Starlette ANimation](https://github.com/TazkieCT/starlette/blob/test_merge/images/pixil-gif-drawing.gif)
 # 🌟 Starlette - An Educational Puzzle Game
 
 **Starlette** is an engaging 2D escape room puzzle game that subtly teaches players programming logic through interactive challenges. Inspired by commercial-quality games, Starlette disguises learning in fun mechanics—perfect for players who "accidentally" learn while having fun!
@@ -29,12 +29,12 @@ Starlette places the player inside a mysterious digital lab where the only way o
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="images/MainMenuGuide.png" alt="Main Menu" width="300"/></td>
-      <td align="center"><img src="images/MokkaDeviceExample.jpg" alt="Mokka Device" width="300"/></td>
+      <td align="center"><img src="images/MainMenuGuide.png" alt="Main Menu" width="500"/></td>
+      <td align="center"><img src="images/MokkaDeviceExample.jpg" alt="Mokka Device" width="500"/></td>
     </tr>
     <tr>
-      <td align="center"><img src="images/Custscene.jpg" alt="Game CutScene" width="300"/></td>
-      <td align="center"><img src="images/GameplayExample.jpg" alt="Gameplay" width="300"/></td>
+      <td align="center"><img src="images/Custscene.jpg" alt="Game CutScene" width="500"/></td>
+      <td align="center"><img src="images/GameplayExample.jpg" alt="Gameplay" width="500"/></td>
     </tr>
   </table>
 </div>
