@@ -37,7 +37,7 @@ Starlette places the player inside a mysterious digital lab where the only way o
 </p>
 
 <p align="center">
-<img src="images/Custscene.jpg" alt="Game CutScene" width="600"/>
+<!-- <img src="images/Custscene.jpg" alt="Game CutScene" width="600"/> -->
 </p>
 
 <img src="images/pixil-gif-drawing.gif" width="600"/>
