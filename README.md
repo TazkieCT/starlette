@@ -54,8 +54,8 @@ Starlette places the player inside a mysterious digital lab where the only way o
 ### 📦 Clone the Repository
 
 ```bash
-git clone https://github.com/TazkieCT/starlette-game.git
-cd starlette-game
+git clone https://github.com/TazkieCT/starlette.git
+cd starlette
 ```
 ### or install the game:
 https://starlette-web-shxg.vercel.app/
