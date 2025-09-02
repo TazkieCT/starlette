@@ -44,10 +44,8 @@ Starlette places the player inside a mysterious digital lab where the only way o
 ## 🛠️ Built With
 
 - **Unity** – game engine for core game logic and visuals
-- **React.js** – frontend interface (if applicable)
-- **Express.js / Go / Rust** – backend API (choose one based on your stack)
 - **Firebase** – user authentication and cloud data storage
-- **Figma / Canva** – UI/UX prototyping
+- **Figma & Canva** – UI/UX prototyping
 
 ---
 
@@ -56,7 +54,7 @@ Starlette places the player inside a mysterious digital lab where the only way o
 ### 📦 Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/starlette-game.git
+git clone https://github.com/TazkieCT/starlette-game.git
 cd starlette-game
 ```
 ### or install the game:
